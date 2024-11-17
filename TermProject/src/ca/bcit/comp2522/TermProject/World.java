@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
@@ -18,9 +16,12 @@ import java.util.stream.IntStream;
 public class World
 {
     private final Map<String, Country> countries;
-    private final Set<String> keyList;
     private final static String COUNTRY_FILE_NAMES = "abcdefghijklmnopqrstuvyz";
-
+    private final static int STARTING_INDEX = 0;
+    private final static int NAME_INDEX = 0;
+    private final static int NAME_AND_CAPITAL_SIZE = 2;
+    private final static int CAPITAL_INDEX = 1;
+    private final static int FACTS_SIZE = 3;
     /**
      * World constructor.
      */
@@ -28,16 +29,15 @@ public class World
     {
         countries = new HashMap<>();
         generateWorld(countries);
+    }
 
-        keyList = countries.keySet();
-
-        for (final String key : keyList)
-        {
-            final Country country;
-            country = countries.get(key);
-
-            System.out.println(country.getDetails());
-        }
+    /**
+     * Gets the countries Hashmap.
+     * @return the countries as a Map.
+     */
+    public Map<String, Country> getCountries()
+    {
+        return countries;
     }
 
     /*
@@ -47,49 +47,45 @@ public class World
      */
     private static void parseCountry(final Path countryPath, final Map<String, Country> countries)
     {
-        // Using try-with-resources (large file) - to be auto-closed, resource needs to be declared inside try block
         try (final BufferedReader br = Files.newBufferedReader(countryPath))
         {
-            // Skip the first line if it's a header or unnecessary
-            String currentLine = br.readLine(); // Skip header or empty line
+            String currentLine;
+            currentLine = br.readLine();
 
-            // Read the country data while the file has more lines.
-            while ((currentLine = br.readLine()) != null)
+            while ((currentLine) != null)
             {
-                // Check if the line contains a colon, indicating a name:capital pair
+                String[] nameAndCapital;
+                String[] factList;
+                nameAndCapital = new String[] {};
+                factList = new String[FACTS_SIZE];
+
+                // Parse the name and capital.
                 if (currentLine.contains(":"))
                 {
-                    // Split the line into name and capital based on the colon delimiter
-                    String[] nameAndCapital = currentLine.split(":");
-
-                    // Ensure that we have two parts: name and capital
-                    if (nameAndCapital.length == 2)
-                    {
-                        // Fetch the next three lines for facts, checking if they are valid
-                        String[] facts = new String[3];
-                        for (int i = 0; i < 3; i++)
-                        {
-                            String factLine = br.readLine();
-                            if (factLine != null && !factLine.trim().isEmpty())
-                            {
-                                facts[i] = factLine.trim();
-                            }
-                            else
-                            {
-                                // If any of the facts are missing, set as empty or handle error
-                                facts[i] = "Unknown Fact";
-                            }
-                        }
-
-                        // Create a new Country object and add it to the countries map
-                        Country c = new Country(nameAndCapital[0], nameAndCapital[1], facts);
-                        countries.put(nameAndCapital[0], c);
-                    }
-                    else
-                    {
-                        System.out.println("Skipping malformed country line: " + currentLine);
-                    }
+                    nameAndCapital = currentLine.split(":");
+                } else {
+                    currentLine = br.readLine();
+                    continue;
                 }
+
+                // If the name and capital isn't populated correctly
+                // Keep moving down the list.
+                if (nameAndCapital.length < NAME_AND_CAPITAL_SIZE) {
+                    currentLine = br.readLine();
+                    continue;
+                }
+
+                // Fill in the facts array.
+                for (int i = STARTING_INDEX; i < FACTS_SIZE; i++)
+                {
+                    String fact = br.readLine();
+                    if (fact != null) { factList[i] = fact; }
+                }
+
+                Country c = new Country(nameAndCapital[NAME_INDEX], nameAndCapital[CAPITAL_INDEX], factList);
+                countries.put(nameAndCapital[NAME_INDEX], c);
+
+                currentLine = br.readLine();
             }
         }
         catch (final IOException e)
@@ -106,7 +102,7 @@ public class World
      */
     private static void generateWorld(final Map<String, Country> countries)
     {
-        IntStream.range(0, COUNTRY_FILE_NAMES.length())
+        IntStream.range(STARTING_INDEX, COUNTRY_FILE_NAMES.length())
                 .mapToObj(i -> "src/ca/bcit/comp2522/TermProject/" + COUNTRY_FILE_NAMES.charAt(i) + ".txt")
                 .map(Path::of)
                 .forEach(countryPath -> {

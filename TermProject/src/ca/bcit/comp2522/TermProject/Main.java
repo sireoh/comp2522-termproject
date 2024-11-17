@@ -2,6 +2,11 @@ package ca.bcit.comp2522.TermProject;
 
 import java.util.Scanner;
 
+/**
+ * Main Class, represents the Main Room of the Game.
+ * @author Vincent Fung
+ * @version 2024
+ */
 public class Main
 {
     public static void main(String[] args)
@@ -13,19 +18,30 @@ public class Main
 
        do
        {
-           System.out.println("Please choose an option:\n");
-           System.out.println("Press W to play the Word game.\n");
-           System.out.println("Press N to play the Number game.\n");
-           System.out.println("Press M to play the Minecraft game.\n");
-           System.out.println("Press Q to quit.\n");
+           System.out.println("Please choose an option:");
+           System.out.println("Press W to play the Word game.");
+           System.out.println("Press N to play the Number game.");
+           System.out.println("Press M to play the Minecraft game.");
+           System.out.println("Press Q to quit.");
 
            option = scan.nextLine();
+           option = option.toLowerCase();
 
-           if (validateChoice(option))
+           if (validateChoice(option) && !option.equals("q"))
            {
-
+                switch(option)
+                {
+                    case "w" : System.out.println("starting the word game."); break;
+                    case "n" : System.out.println("starting the number game."); break;
+                    case "m" : System.out.println("starting the minecraft game."); break;
+                    default : System.out.println("please enter a valid character."); break;
+                }
            }
        } while (!option.equalsIgnoreCase("Q") && !validateChoice(option));
+
+        if (option.equalsIgnoreCase("q")) {
+            System.out.println("Thanks for playing !!!");
+        }
 
         scan.close();
     }

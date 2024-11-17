@@ -1,5 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 
+import java.util.Random;
+
 /**
  * Country class, represents a Country.
  * @author Vincent Fung
@@ -10,6 +12,9 @@ public class Country
     private final String name;
     private final String capitalCityName;
     private final String[] facts;
+    private final static int FIRST_INDEX = 0;
+    private final static int SECOND_INDEX = 1;
+    private final static int THIRD_INDEX = 2;
 
     /**
      * Constructor for the Country class.
@@ -45,6 +50,34 @@ public class Country
         return capitalCityName;
     }
 
+    /**
+     * Generates a random fact from the Country.
+     * @return a random fact as a String.
+     */
+    public String getRandomFact()
+    {
+        final Random random;
+        final int randIndex;
+
+        random = new Random();
+        randIndex = random.nextInt(facts.length);
+
+        return facts[randIndex];
+    }
+
+    /**
+     * Gets the details of the Country.
+     * @return the details as a String.
+     */
+    public String getDetails()
+    {
+        return name + ", "
+            + capitalCityName + "\n"
+            + facts[FIRST_INDEX] + "\n"
+            + facts[SECOND_INDEX] + "\n"
+            + facts[THIRD_INDEX] + "\n";
+    }
+
     /*
      * Validates if the name is null, or blank.
      * @param name as a String.
@@ -55,16 +88,6 @@ public class Country
         {
             throw new IllegalArgumentException("Name cannot be null or empty");
         }
-    }
-
-    /**
-     * Gets the details of the Country.
-     * @return the details as a String.
-     */
-    public String getDetails()
-    {
-        return "The country is " + name + " and capital city is " + capitalCityName
-                + "Some fun facts are " + facts[0] + ", " + facts[1] + ", and " + facts[2] + ".";
     }
 
     /*
