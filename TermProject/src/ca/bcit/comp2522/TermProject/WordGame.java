@@ -18,10 +18,21 @@ public class WordGame
     private final static int QUESTION_TYPE_WHICH_COUNTRY = 2;
     private final static int QUESTION_TYPE_SIZE = 3;
     private final static int START_INDEX = 0;
+    private final static int MAX_TRIES = 3;
+    private final static int END_INDEX_RANDOM_FACT_FIRST_LETTER = 1;
+    private final static int CORRECT_ON_FIRST_ATTEMPT = 1;
+    private final static int CORRECT_ON_SECOND_ATTEMPT = 2;
+    private final static int INCORRECT_AFTER_TWO_ATTEMPTS = 3;
+    private final static int INCREMENT_AMOUNT = 1;
+    private final Map<Integer, Integer> attempts;
 
     public WordGame()
     {
         final World world;
+        attempts = new HashMap<>();
+        attempts.put(CORRECT_ON_FIRST_ATTEMPT, START_INDEX);
+        attempts.put(CORRECT_ON_SECOND_ATTEMPT, START_INDEX);
+        attempts.put(INCORRECT_AFTER_TWO_ATTEMPTS, START_INDEX);
 
         world = new World();
         countries = world.getCountries();
@@ -37,25 +48,35 @@ public class WordGame
     {
         final Random random;
         final Scanner scan;
-        final String userInput;
 
-        int currentQuestion = START_INDEX;
+        // These get updated in the while loop.
+        int currentQuestion;
         String answer;
         boolean isCorrect;
-        isCorrect = false;
-
+        int typeOfQuestion;
+        int currentTry;
+        int currentAttempt;
+        String randomFact;
 
         random = new Random();
         scan = new Scanner(System.in);
-        int typeOfQuestion;
         typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
+        currentAttempt = START_INDEX;
+        currentTry = START_INDEX;
+        currentQuestion = START_INDEX;
+        isCorrect = false;
+        randomFact = questions[currentQuestion].getRandomFact();
+
 
         while (currentQuestion < MAX_QUESTION_SIZE) {
+            currentTry++;
+            System.out.println("Current Attempt: " + currentTry);
+
             System.out.println(
                     switch (typeOfQuestion) { // Ensure random number is between 0 and 2
-                        case QUESTION_TYPE_RANDOM_FACT -> "Which country is: " + questions[currentQuestion].getRandomFact();
+                        case QUESTION_TYPE_RANDOM_FACT -> handleFactQuestion(randomFact);
                         case QUESTION_TYPE_WHICH_CAPITAL -> questions[currentQuestion].getCapitalCityName() + " is the capital of which country?";
-                        case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of: " + questions[currentQuestion].getName() + "?";
+                        case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of " + questions[currentQuestion].getName() + "?";
                         default -> "No function called";
                     }
                     + "\t" + questions[currentQuestion].getName() + ", " + questions[currentQuestion].getCapitalCityName()
@@ -69,11 +90,74 @@ public class WordGame
                 case QUESTION_TYPE_WHICH_COUNTRY -> isCorrect = handleAnswer(currentQuestion, answer, typeOfQuestion);
                 default -> throw new IllegalStateException("Unexpected value: " + typeOfQuestion);
             }
-            if(isCorrect) {
+
+            if(isCorrect || currentTry >= MAX_TRIES) {
+                attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
+                printScore(); // DEBUG
+
                 typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
                 currentQuestion++;
+                randomFact = questions[currentQuestion].getRandomFact();
+
+                if (currentTry >= MAX_TRIES)
+                {
+                    attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
+                    System.out.println("Ran out of tries, next question.");
+                }
+
+                currentAttempt++;
+                currentTry = START_INDEX;
+            } else {
+                System.out.println("Try again!");
             }
         }
+    }
+
+    /*
+     * Prints the score.
+     */
+    private void printScore()
+    {
+        final StringBuilder sb;
+        final Set<Integer> keyList;
+        keyList = attempts.keySet();
+
+        for (final Integer key : keyList) {
+            if (key == CORRECT_ON_FIRST_ATTEMPT) {
+                System.out.println(attempts.get(key) + " correct answers on the first attempt.");
+            }
+
+            if (key == CORRECT_ON_SECOND_ATTEMPT) {
+                System.out.println(attempts.get(key) + " correct answers on the second attempt.");
+            }
+
+            if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
+                System.out.println(attempts.get(key) + " incorrect answers on the two attempts each.");
+            }
+        }
+
+        sb = new StringBuilder();
+
+        /*
+        3 correct answers on the first attempt
+        - 2 correct answers on the second attempt
+        - 5 incorrect answers on two attempts each
+        */
+    }
+
+    /*
+     * Properly formats the fact question.
+     * @param randomFact as a String
+     * @return the fact question, properly formatted
+     */
+    private static String handleFactQuestion(final String randomFact)
+    {
+        return "Which country is "
+                + randomFact
+                .substring(START_INDEX, END_INDEX_RANDOM_FACT_FIRST_LETTER)
+                .toLowerCase()
+                + randomFact
+                .substring(END_INDEX_RANDOM_FACT_FIRST_LETTER);
     }
 
     /*
@@ -107,8 +191,6 @@ public class WordGame
             System.out.println("Correct!");
             return true;
         }
-
-        System.out.println("Try again!");
         return false;
     }
 
