@@ -1,5 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -9,6 +11,12 @@ import java.util.Scanner;
  */
 public class Main
 {
+    private List<Score> scoreReferences;
+
+    {
+        scoreReferences = new ArrayList<Score>();
+    }
+
     public static void main(String[] args)
     {
         final Scanner scan;
