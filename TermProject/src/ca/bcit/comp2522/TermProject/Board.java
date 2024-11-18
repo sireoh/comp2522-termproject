@@ -26,16 +26,20 @@ public class Board
     private final static int MIN_BUTTON_VALUE = 1;
     private final static int MAX_BUTTON_VALUE = 1000;
     private final static int MAX_BOARD_SIZE = 20;
+    private final static int ERROR_CHECKING_SCORE_STARTING_INDEX = 1;
+    private final static int PREVIOUS_CELL = 1;
+    private final static int EMPTY_CELL = 0;
+    private final static int NO_ERRORS = 0;
     private final Random random;
-    private String currentNumber;
-    private String[] board;
+    private int currentNumber;
+    private int[] board;
 
     public Board()
     {
         random = new Random();
 
-        currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE) + "";
-        board = new String[MAX_BOARD_SIZE];
+        currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE);
+        board = new int[MAX_BOARD_SIZE];
     }
 
     /*
@@ -53,7 +57,7 @@ public class Board
         gridLayout.setHgap(PADDING);
         gridLayout.setVgap(PADDING);
         int index = STARTING_INDEX;
-        label = new Label(currentNumber);
+        label = new Label("Please choose a location to place: " + currentNumber);
 
         for (int row = STARTING_INDEX; row < MAX_ROW_COUNT; row++) {
             for (int col = STARTING_INDEX; col < MAX_COLUMN_COUNT; col++) {
@@ -72,8 +76,9 @@ public class Board
                     handleInsertion(temp, tempInt);
 
                     if (countItems() < MAX_BOARD_SIZE) {
-                        label.setText(currentNumber);
+                        label.setText("Please choose a location to place: " + currentNumber);
                     } else {
+                        calculateScore();
                         System.out.println("the board is filled homie");
                     }
                 });
@@ -91,13 +96,36 @@ public class Board
         return vbox;
     }
 
+    /*
+     *
+     */
+    private void calculateScore()
+    {
+        int errors;
+        errors = STARTING_INDEX;
+
+        for (int i = ERROR_CHECKING_SCORE_STARTING_INDEX; i < MAX_BOARD_SIZE; i++) {
+            if (board[i] < board[i - PREVIOUS_CELL]) {
+                errors++;
+            }
+        }
+
+        if (errors > NO_ERRORS) {
+            System.out.println("ur so bad.");
+        }
+    }
+
+    /*
+     *
+     * @return
+     */
     private int countItems()
     {
         int count = STARTING_INDEX;
 
-        for (final String string : board)
+        for (final int number : board)
         {
-            if (string != null)
+            if (number != EMPTY_CELL)
             {
                 count++;
             }
@@ -113,10 +141,10 @@ public class Board
      */
     private void handleInsertion(final Button temp, final int index)
     {
-        if (board[index] == null) {
-            temp.setText(currentNumber);
+        if (board[index] == EMPTY_CELL) {
+            temp.setText(currentNumber + "");
             board[index] = currentNumber;
-            currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE) + "";
+            currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE);
         } else {
             System.out.println("could not set. can u pick another box pls");
         }
