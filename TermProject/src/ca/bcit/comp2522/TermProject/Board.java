@@ -32,7 +32,7 @@ public class Board
     private final static int NO_ERRORS = 0;
     private final Random random;
     private int currentNumber;
-    private int[] board;
+    private final int[] board;
 
     public Board()
     {
@@ -50,13 +50,14 @@ public class Board
     {
         final VBox vbox;
         final Label label;
+        int index;
         final GridPane gridLayout;
         vbox = new VBox(VBOX_PADDING);
         gridLayout = new GridPane();
 
         gridLayout.setHgap(PADDING);
         gridLayout.setVgap(PADDING);
-        int index = STARTING_INDEX;
+        index = STARTING_INDEX;
         label = new Label("Please choose a location to place: " + currentNumber);
 
         for (int row = STARTING_INDEX; row < MAX_ROW_COUNT; row++) {
@@ -97,7 +98,7 @@ public class Board
     }
 
     /*
-     *
+     * Calculates the final score
      */
     private void calculateScore()
     {
@@ -144,6 +145,8 @@ public class Board
         if (board[index] == EMPTY_CELL) {
             temp.setText(currentNumber + "");
             board[index] = currentNumber;
+
+            // Randomize the global int for the next function.
             currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE);
         } else {
             System.out.println("could not set. can u pick another box pls");
