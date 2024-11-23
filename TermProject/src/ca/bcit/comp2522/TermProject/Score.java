@@ -42,11 +42,11 @@ public class Score
         this.numIncorrectTwoAttempts = STARTING_SCORE;
     }
 
-    /*
+    /**
      * Helper function for the formattedDateTime
      * @return the formatted date time as a String
      */
-    private String getFormattedDateTime()
+    public String getFormattedDateTime()
     {
         return formattedDateTime;
     }
@@ -56,7 +56,7 @@ public class Score
      * To be printed later.
      */
     private void setupScoreList() {
-        final int currentTotalScore = calcTotalScore();
+        final int currentTotalScore = getTotalScore();
         pastTotalScoresList.add(currentTotalScore); // Add the current score to the list
 
         scoreList.clear(); // Clear the scoreList to avoid appending old data
@@ -65,8 +65,8 @@ public class Score
         scoreList.add("Correct First Attempts: " + numCorrectFirstAttempt);
         scoreList.add("Correct Second Attempts: " + numCorrectSecondAttempt);
         scoreList.add("Incorrect Attempts: " + numIncorrectTwoAttempts);
-        scoreList.add("Total Score: " + currentTotalScore);
-        scoreList.add("Average Score: " + calcAverageScore()); // Calculate and display the average
+        scoreList.add("Total Score: " + currentTotalScore + " points");
+        scoreList.add("Average Score: " + calcAverageScore() + " points/game"); // Calculate and display the average
     }
 
     /*
@@ -89,7 +89,7 @@ public class Score
      * Calculates the total score.
      * @return the totalScore as an int.
      */
-    private int calcTotalScore()
+    public int getTotalScore()
     {
         int total;
         total = ((numCorrectFirstAttempt) * NUM_CORRECT_FIRST_ATTEMPT_MULTIPLIER) +

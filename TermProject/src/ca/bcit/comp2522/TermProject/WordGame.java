@@ -1,5 +1,10 @@
 package ca.bcit.comp2522.TermProject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,19 +23,26 @@ public class WordGame
     private final static int QUESTION_TYPE_WHICH_COUNTRY = 2;
     private final static int QUESTION_TYPE_SIZE = 3;
     private final static int START_INDEX = 0;
+    private final static int STARTING_TOTAL = 0;
     private final static int MAX_TRIES = 3;
     private final static int END_INDEX_RANDOM_FACT_FIRST_LETTER = 1;
     private final static int CORRECT_ON_FIRST_ATTEMPT = 1;
     private final static int CORRECT_ON_SECOND_ATTEMPT = 2;
     private final static int INCORRECT_AFTER_TWO_ATTEMPTS = 3;
     private final static int INCREMENT_AMOUNT = 1;
+    private final static int RIGHT_SIDE = 1;
     private final Map<Integer, Integer> attempts;
     private final Score score;
     private boolean isPlaying;
-    final Scanner scanner;
+    private final Scanner scanner;
+    private final Path inputFilePath;
+    private static final String INPUT_FILE = "output/score.txt";
+    private final List<Integer> totalScores;
+    private final List<String> dateAndTimes;
 
     public WordGame()
     {
+
         final World world;
         attempts = new HashMap<>();
         attempts.put(CORRECT_ON_FIRST_ATTEMPT, START_INDEX);
@@ -40,10 +52,15 @@ public class WordGame
         isPlaying = true;
         String choice;
 
+        inputFilePath = Paths.get(INPUT_FILE);
         world = new World();
         countries = world.getCountries();
         questions = generateQuestions();
         score = new Score();
+        totalScores = new ArrayList<>();
+        dateAndTimes = new ArrayList<>();
+
+        printQuitMessage();
 
         while (isPlaying) {
             play();
@@ -58,6 +75,7 @@ public class WordGame
             {
                 case "y" -> score.incrementGamesPlayed();
                 case "n" -> {
+                    printQuitMessage();
                     score.createScoreFile();
                     isPlaying = false;
                 }
@@ -166,12 +184,96 @@ public class WordGame
         }
 
         sb = new StringBuilder();
+    }
 
-        /*
-        3 correct answers on the first attempt
-        - 2 correct answers on the second attempt
-        - 5 incorrect answers on two attempts each
-        */
+    /*
+     * Handles the parsing of the total scores.
+     * @param totalScore as a String.
+     */
+    private void handleAddTotalScores(final String totalScore)
+    {
+        final String[] parts;
+        parts = totalScore.split("\\D+");
+
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                int number;
+                number = Integer.parseInt(part);
+                totalScores.add(number);
+                break;
+            }
+        }
+    }
+
+    /*
+     * Prints the quit message.
+     */
+    private void printQuitMessage()
+    {
+        int currentHighest;
+        int highscoreIndex;
+        highscoreIndex = START_INDEX;
+        currentHighest = STARTING_TOTAL;
+
+        // Parse the file to collect all the scores.
+        if (Files.exists(inputFilePath)) {
+
+            // Using try-with-resources (large file) - to be auto-closed, resource needs to be declared inside try block
+            try (final BufferedReader br = Files.newBufferedReader(inputFilePath))
+            {
+                String currentLine;
+
+                currentLine = br.readLine();
+
+                // Check if the first and subsequent lines are not null.
+                while (currentLine != null)
+                {
+                    if (currentLine.contains("Date and Time:"))
+                    {
+                        dateAndTimes.add(currentLine);
+                    }
+                    if (currentLine.contains("Total Score:"))
+                    {
+                        handleAddTotalScores(currentLine);
+                    }
+
+                    currentLine = br.readLine();
+                }
+            }
+            catch (final IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i = START_INDEX; i < totalScores.size(); i++) {
+            if (totalScores.get(i) > currentHighest)
+            {
+                currentHighest = totalScores.get(i);
+                highscoreIndex = i;
+            }
+        }
+
+        if (score.getTotalScore() < currentHighest)
+        {
+            System.out.println("You did not beat the high score of " + currentHighest
+                    + " points per game from " + formatDateTimeScore(dateAndTimes.get(highscoreIndex)));
+        }
+        else
+        {
+            System.out.println("CONGRATULATIONS! You are the new high score with an average of " + score.getTotalScore()
+                    + " points per game from " + score.getFormattedDateTime());
+        }
+    }
+
+    /*
+     * Formats the string to remove the "Date and Time: " from the string.
+     * @param dateAndTime
+     * @return
+     */
+    private static String formatDateTimeScore(final String dateAndTime)
+    {
+        return dateAndTime.split("e: ")[RIGHT_SIDE];
     }
 
     /*
