@@ -8,10 +8,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -41,12 +41,22 @@ public class Board
     private int currentNumber;
     private final int[] board;
     private Alert lossAlert;
+    private Alert startAlert;
     private Label label;
     private List<Button> buttons;
+    private Stage stage;
 
     public Board()
     {
+        final Button playButton;
+
         random = new Random();
+        stage = new Stage();
+        startAlert = new Alert(Alert.AlertType.INFORMATION);
+        playButton = ((Button) startAlert.getDialogPane().lookupButton(ButtonType.OK));;
+        startAlert.setTitle("Welcome");
+        startAlert.setHeaderText("Welcome to the 20-Number Challenge! Click 'Play' to start.");
+        playButton.setText("Play");
 
         currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE);
         board = new int[MAX_BOARD_SIZE];
@@ -61,9 +71,9 @@ public class Board
         final VBox vbox;
         int index;
         final GridPane gridLayout;
+
         vbox = new VBox(VBOX_PADDING);
         gridLayout = new GridPane();
-
         gridLayout.setHgap(PADDING);
         gridLayout.setVgap(PADDING);
         index = STARTING_INDEX;
@@ -108,6 +118,11 @@ public class Board
         return vbox;
     }
 
+    public void setStage(final Stage stage)
+    {
+        this.stage = stage;
+    }
+
     /*
      * Calculates the final score
      */
@@ -124,16 +139,25 @@ public class Board
 
         if (errors > NO_ERRORS) {
             final Button tryAgainButton;
-            lossAlert = new Alert(Alert.AlertType.WARNING);
+            final Button quitButton;
+            lossAlert = new Alert(Alert.AlertType.CONFIRMATION);
             tryAgainButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.OK));
+            quitButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.CANCEL));
 
             tryAgainButton.setText("Try Again");
+            quitButton.setText("Quit");
+
             tryAgainButton.setOnAction(event -> {
                 handleNewGame();
             });
+
+            quitButton.setOnAction(event -> {
+                stage.close();
+            });
+
             label.setText("Click 'Try Again' to start a new game.");
             lossAlert.setTitle("Game Over");
-            lossAlert.setHeaderText("Welcome to the 20-Number Challenge! Click 'Try Again' to start.");
+            lossAlert.setHeaderText("Game Over! Impossible to place the next number: " + currentNumber + ". Try again?");
             lossAlert.show();
         }
     }
@@ -172,6 +196,14 @@ public class Board
         }
 
         return count;
+    }
+
+    /**
+     * Shows the welcome alert.
+     */
+    public void showStartAlert()
+    {
+        startAlert.show();
     }
 
     public void handleStyling(final Scene scene)
@@ -219,7 +251,5 @@ public class Board
         } else {
             System.out.println("Box has already been filled.");
         }
-
-        System.out.println(Arrays.toString(board));
     }
 }

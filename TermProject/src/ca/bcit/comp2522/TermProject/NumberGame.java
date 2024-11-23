@@ -17,11 +17,12 @@ public class NumberGame extends Application
 {
     private final static int WIDTH = 800;
     private final static int HEIGHT = 600;
-    private final static Board board;
+    private final Board board;
+    private Score score;
 
-    static
     {
         board = new Board();
+        score = new Score();
     }
 
     /**
@@ -47,9 +48,11 @@ public class NumberGame extends Application
 
         scene = new Scene(layout, WIDTH, HEIGHT);
 
+        board.setStage(stage);
         board.handleStyling(scene);
 
         stage.setScene(scene);
         stage.show();
+        board.showStartAlert();
     }
 }
