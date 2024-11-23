@@ -1,11 +1,18 @@
 package ca.bcit.comp2522.TermProject;
 
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -33,6 +40,9 @@ public class Board
     private final Random random;
     private int currentNumber;
     private final int[] board;
+    private Alert lossAlert;
+    private Label label;
+    private List<Button> buttons;
 
     public Board()
     {
@@ -49,7 +59,6 @@ public class Board
     public VBox generateLayout()
     {
         final VBox vbox;
-        final Label label;
         int index;
         final GridPane gridLayout;
         vbox = new VBox(VBOX_PADDING);
@@ -58,7 +67,10 @@ public class Board
         gridLayout.setHgap(PADDING);
         gridLayout.setVgap(PADDING);
         index = STARTING_INDEX;
-        label = new Label("Please choose a location to place: " + currentNumber);
+        label = new Label(formatNextNumberText(currentNumber));
+        label.setMaxWidth(WIDTH);
+        label.setAlignment(Pos.CENTER);
+        buttons = new ArrayList<>();
 
         for (int row = STARTING_INDEX; row < MAX_ROW_COUNT; row++) {
             for (int col = STARTING_INDEX; col < MAX_COLUMN_COUNT; col++) {
@@ -77,10 +89,9 @@ public class Board
                     handleInsertion(temp, tempInt);
 
                     if (countItems() < MAX_BOARD_SIZE) {
-                        label.setText("Please choose a location to place: " + currentNumber);
+                        label.setText(formatNextNumberText(currentNumber));
                     } else {
                         calculateScore();
-                        System.out.println("the board is filled homie");
                     }
                 });
 
@@ -112,13 +123,41 @@ public class Board
         }
 
         if (errors > NO_ERRORS) {
-            System.out.println("ur so bad.");
+            final Button tryAgainButton;
+            lossAlert = new Alert(Alert.AlertType.WARNING);
+            tryAgainButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.OK));
+
+            tryAgainButton.setText("Try Again");
+            tryAgainButton.setOnAction(event -> {
+                handleNewGame();
+            });
+            label.setText("Click 'Try Again' to start a new game.");
+            lossAlert.setTitle("Game Over");
+            lossAlert.setHeaderText("Welcome to the 20-Number Challenge! Click 'Try Again' to start.");
+            lossAlert.show();
         }
     }
 
     /*
-     *
-     * @return
+     * Handles the creation of a new game,
+     * and resets the board.
+     */
+    private void handleNewGame()
+    {
+        // Clears the board.
+        for (int i = STARTING_INDEX; i < MAX_BOARD_SIZE; i++)
+        {
+            buttons.get(i).setText("[]");
+            board[i] = EMPTY_CELL;
+        }
+
+        currentNumber = random.nextInt(MAX_BUTTON_VALUE);
+        label.setText(formatNextNumberText(currentNumber));
+    }
+
+    /*
+     * Counts the number of filled items in the array.
+     * @return the number of filled items as an int.
      */
     private int countItems()
     {
@@ -135,21 +174,50 @@ public class Board
         return count;
     }
 
+    public void handleStyling(final Scene scene)
+    {
+        final URL styleSheetURL;
+        styleSheetURL = getClass().getResource("./styles.css");
+
+        if (styleSheetURL == null)
+        {
+            System.out.println("Stylesheet was not found");
+        }
+        else
+        {
+            scene.getStylesheets().add(styleSheetURL.toExternalForm());
+        }
+    }
+
     /*
-     *
+     * Formats the nextNumber nicely.
+     * @param currentNumber as an int.
+     * @return the formatted String as a String.
+     */
+    private String formatNextNumberText(final int currentNumber)
+    {
+        return "Next number: " + currentNumber + " - Select a slot.";
+    }
+
+    /*
+     * Handles the insertion of the buttons to the boardArray.
      * @param temp
      * @param index
      */
     private void handleInsertion(final Button temp, final int index)
     {
         if (board[index] == EMPTY_CELL) {
+            // Store the button in an array to be reset later.
+            buttons.add(temp);
+
+            // Sets the number
             temp.setText(currentNumber + "");
             board[index] = currentNumber;
 
             // Randomize the global int for the next function.
             currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE);
         } else {
-            System.out.println("could not set. can u pick another box pls");
+            System.out.println("Box has already been filled.");
         }
 
         System.out.println(Arrays.toString(board));

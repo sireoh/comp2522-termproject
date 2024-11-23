@@ -1,7 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx.application.Application;
+
 import java.util.Scanner;
 
 /**
@@ -11,15 +11,13 @@ import java.util.Scanner;
  */
 public class Main
 {
-    private List<Score> scoreReferences;
-
-    {
-        scoreReferences = new ArrayList<Score>();
-    }
-
     public static void main(String[] args)
     {
         final Scanner scan;
+        NumberGame ng;
+
+        WordGame wg;
+        MyGame mg;
         scan = new Scanner(System.in);
 
         String option;
@@ -39,11 +37,24 @@ public class Main
            {
                 switch(option)
                 {
-                    case "w" : System.out.println("starting the word game."); break;
-                    case "n" : System.out.println("starting the number game."); break;
-                    case "m" : System.out.println("starting the minecraft game."); break;
-                    default : System.out.println("please enter a valid character."); break;
+                    case "w" -> {
+                        System.out.println("Starting the word game.");
+                        wg = new WordGame();
+                    }
+                    case "n" -> {
+                        System.out.println("Starting the number game.");
+                        NumberGame.main(new String[]{});
+                    }
+                    case "m" -> {
+                        System.out.println("Starting the minecraft game.");
+                        mg = new MyGame();
+                    }
+                    default -> System.out.println("please enter a valid character.");
                 }
+           }
+           else
+           {
+               System.out.println("Chosen option must be either W, N, M or Q.");
            }
        } while (!option.equalsIgnoreCase("Q") && !validateChoice(option));
 
@@ -64,7 +75,6 @@ public class Main
     {
         if (option == null || option.isBlank())
         {
-            System.out.println("Chosen option can not be null or Blank.");
             return false;
         }
 
@@ -75,7 +85,6 @@ public class Main
                 option.equalsIgnoreCase("Q"))
         )
         {
-            System.out.println("Chosen option must be either W, N, M or Q.");
             return false;
         }
 
