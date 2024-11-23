@@ -24,7 +24,7 @@ public class WordGame
     private final static int QUESTION_TYPE_SIZE = 3;
     private final static int START_INDEX = 0;
     private final static int STARTING_TOTAL = 0;
-    private final static int MAX_TRIES = 3;
+    private final static int MAX_TRIES = 2;
     private final static int END_INDEX_RANDOM_FACT_FIRST_LETTER = 1;
     private final static int CORRECT_ON_FIRST_ATTEMPT = 1;
     private final static int CORRECT_ON_SECOND_ATTEMPT = 2;
@@ -115,7 +115,7 @@ public class WordGame
 
         while (currentQuestion < MAX_QUESTION_SIZE) {
             currentTry++;
-            System.out.println("Current Attempt: " + currentTry);
+            System.out.println("Current Attempt: " + formatCurrentTry(currentTry));
 
             System.out.println(
                     switch (typeOfQuestion) { // Ensure random number is between 0 and 2
@@ -138,22 +138,24 @@ public class WordGame
 
             if((isCorrect || currentTry >= MAX_TRIES)) {
                 attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
-                printScore(); // DEBUG
+                printScore();
 
+                // Check if it has reached the max tries.
+                if (currentTry == INCORRECT_AFTER_TWO_ATTEMPTS)
+                {
+                    System.out.println("Ran out of tries, next question.");
+                }
+
+                // Otherwise go to next question.
                 typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
                 randomFact = questions[currentQuestion].getRandomFact();
                 currentQuestion++;
-
-                if (currentTry >= MAX_TRIES)
-                {
-                    attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
-                    System.out.println("Ran out of tries, next question.");
-                }
 
                 currentAttempt++;
                 currentTry = START_INDEX;
             } else {
                 System.out.println("Try again!");
+                currentTry++;
             }
         }
     }
@@ -264,6 +266,19 @@ public class WordGame
             System.out.println("CONGRATULATIONS! You are the new high score with an average of " + score.getTotalScore()
                     + " points per game from " + score.getFormattedDateTime());
         }
+    }
+
+    /*
+     * Formats the currentTry according to my HashMap.size() logic.
+     * @param formatCurrentTry
+     * @return the formattedCurrentTry as an int.
+     */
+    private static int formatCurrentTry(final int formatCurrentTry)
+    {
+        final int formattedInt;
+        formattedInt = formatCurrentTry == CORRECT_ON_FIRST_ATTEMPT ? CORRECT_ON_FIRST_ATTEMPT : CORRECT_ON_SECOND_ATTEMPT;
+
+        return formattedInt;
     }
 
     /*
