@@ -1,0 +1,8 @@
+Date and Time: 2024-11-23 03:02:39
+Games Played: 7
+Correct First Attempts: 22
+Correct Second Attempts: 88
+Incorrect Attempts: 22
+Total Score: 132
+Average Score: 132
+

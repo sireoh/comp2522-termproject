@@ -103,7 +103,7 @@ public class World
     private static void generateWorld(final Map<String, Country> countries)
     {
         IntStream.range(STARTING_INDEX, COUNTRY_FILE_NAMES.length())
-                .mapToObj(i -> "src/ca/bcit/comp2522/TermProject/" + COUNTRY_FILE_NAMES.charAt(i) + ".txt")
+                .mapToObj(i -> "resources/" + COUNTRY_FILE_NAMES.charAt(i) + ".txt")
                 .map(Path::of)
                 .forEach(countryPath -> {
                     parseCountry(countryPath, countries);

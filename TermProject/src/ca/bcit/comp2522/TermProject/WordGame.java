@@ -25,6 +25,9 @@ public class WordGame
     private final static int INCORRECT_AFTER_TWO_ATTEMPTS = 3;
     private final static int INCREMENT_AMOUNT = 1;
     private final Map<Integer, Integer> attempts;
+    private final Score score;
+    private boolean isPlaying;
+    final Scanner scanner;
 
     public WordGame()
     {
@@ -33,12 +36,36 @@ public class WordGame
         attempts.put(CORRECT_ON_FIRST_ATTEMPT, START_INDEX);
         attempts.put(CORRECT_ON_SECOND_ATTEMPT, START_INDEX);
         attempts.put(INCORRECT_AFTER_TWO_ATTEMPTS, START_INDEX);
+        scanner = new Scanner(System.in);
+        isPlaying = true;
+        String choice;
 
         world = new World();
         countries = world.getCountries();
         questions = generateQuestions();
+        score = new Score();
 
-        play();
+        while (isPlaying) {
+            play();
+
+            System.out.println("Thanks for playing !!");
+            do {
+                System.out.println("Play again? [y]es, [n]o");
+                choice = scanner.nextLine();
+            } while (!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n"));
+
+            switch (choice.toLowerCase())
+            {
+                case "y" -> score.incrementGamesPlayed();
+                case "n" -> {
+                    score.createScoreFile();
+                    isPlaying = false;
+                }
+                default -> System.out.println("Error.");
+            }
+        }
+
+        scanner.close();
     }
 
     /*
@@ -91,13 +118,13 @@ public class WordGame
                 default -> throw new IllegalStateException("Unexpected value: " + typeOfQuestion);
             }
 
-            if(isCorrect || currentTry >= MAX_TRIES) {
+            if((isCorrect || currentTry >= MAX_TRIES)) {
                 attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
                 printScore(); // DEBUG
 
                 typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
-                currentQuestion++;
                 randomFact = questions[currentQuestion].getRandomFact();
+                currentQuestion++;
 
                 if (currentTry >= MAX_TRIES)
                 {
@@ -134,6 +161,8 @@ public class WordGame
             if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
                 System.out.println(attempts.get(key) + " incorrect answers on the two attempts each.");
             }
+
+            handleUpdateScoreObject(key);
         }
 
         sb = new StringBuilder();
@@ -158,6 +187,25 @@ public class WordGame
                 .toLowerCase()
                 + randomFact
                 .substring(END_INDEX_RANDOM_FACT_FIRST_LETTER);
+    }
+
+    /**
+     * Handles the updating of the score object.
+     * @param key as the key of the attempts hashmap.
+     */
+    private void handleUpdateScoreObject(final int key)
+    {
+        if (key == CORRECT_ON_FIRST_ATTEMPT) {
+            score.setNumCorrectFirstAttempt(attempts.get(key));
+        }
+
+        if (key == CORRECT_ON_SECOND_ATTEMPT) {
+            score.setNumCorrectSecondAttempt(attempts.get(key));
+        }
+
+        if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
+            score.setNumIncorrectTwoAttempts(attempts.get(key));
+        }
     }
 
     /*

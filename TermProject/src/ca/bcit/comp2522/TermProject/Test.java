@@ -1,10 +1,17 @@
 package ca.bcit.comp2522.TermProject;
 
-import java.util.Map;
-
 public class Test {
     public static void main(String[] args)
     {
-        WordGame wg = new WordGame();
+        Score score = new Score();
+        score.setNumCorrectFirstAttempt(22);
+        score.setNumCorrectSecondAttempt(88);
+        score.setNumIncorrectTwoAttempts(22);
+
+        for (int i = 0; i < 7; i++) {
+            score.incrementGamesPlayed();
+        }
+
+        score.createScoreFile();
     }
 }

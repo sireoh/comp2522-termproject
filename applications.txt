@@ -1,0 +1,19 @@
+lesson 1: classes, modifiers, overloading, static, constructors, strings, comments and conventions
+
+lesson 2: inheritance, exception handling, scanner, files
+
+lesson 3: polymorphism, overriding, casting, substitution, final methods, final classes
+
+lesson 4: abstract methods, abstract classes, interfaces, functional interfaces, equals(), comparable
+
+lesson 5: arrays, lists, maps, interators, collections
+
+lesson 6: lambda expressions, method references, inner classes
+
+lesson 7: random, streaming and filtering
+
+lesson 8: graphical user interfaces
+
+lesson 9: unit testing, debugger, and UML
+
+lesson 10: memory, singleton, and design patterns
