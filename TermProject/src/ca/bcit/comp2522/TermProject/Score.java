@@ -1,96 +1,108 @@
 package ca.bcit.comp2522.TermProject;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Score Object, represents a Score.
+ * @author Vincent Fung
+ * @version 2024
+ */
 public class Score
 {
-    private final LocalDateTime currentTime;
     private final DateTimeFormatter formatter;
     private final String formattedDateTime;
-    private final List<String> scoreList;
-    private final List<Integer> pastTotalScoresList;
-    private final static int STARTING_SCORE = 0;
 
-    private static final String OUTPUT_DIRECTORY = "output/";
-    private static final String OUTPUT_FILE = "output/score.txt";
+    private final int numGamesPlayed;
+    private final int numCorrectFirstAttempt;
+    private final int numCorrectSecondAttempt;
+    private final int numIncorrectTwoAttempts;
 
-    private int numGamesPlayed;
-    private int numCorrectFirstAttempt;
-    private int numCorrectSecondAttempt;
-    private int numIncorrectTwoAttempts;
     private static final int NUM_CORRECT_FIRST_ATTEMPT_MULTIPLIER = 2;
+    private static final int STARTING_VALUE = 0;
 
-    public Score()
+    /**
+     * Score constructor.
+     * @param currentTime as a LocalDateTime
+     * @param numGamesPlayed as an int.
+     * @param numCorrectFirstAttempt as an int.
+     * @param numCorrectSecondAttempt as an int.
+     * @param numIncorrectTwoAttempts as an int.
+     */
+    public Score(final LocalDateTime currentTime,
+                final int numGamesPlayed,
+                 final int numCorrectFirstAttempt,
+                 final int numCorrectSecondAttempt,
+                 final int numIncorrectTwoAttempts)
     {
+        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        formattedDateTime = currentTime.format(formatter);
+
+        this.numGamesPlayed = numGamesPlayed;
+        this.numCorrectFirstAttempt = numCorrectFirstAttempt;
+        this.numCorrectSecondAttempt = numCorrectSecondAttempt;
+        this.numIncorrectTwoAttempts = numIncorrectTwoAttempts;
+    }
+
+    /**
+     * Empty Constructor.
+     */
+    public Score(){
+        final LocalDateTime currentTime;
+
         currentTime = LocalDateTime.now();
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         formattedDateTime = currentTime.format(formatter);
-        pastTotalScoresList = new ArrayList<>();
-        scoreList = new ArrayList<>();
 
-        this.numGamesPlayed = STARTING_SCORE;
-        this.numCorrectFirstAttempt = STARTING_SCORE;
-        this.numCorrectSecondAttempt = STARTING_SCORE;
-        this.numIncorrectTwoAttempts = STARTING_SCORE;
+        this.numGamesPlayed = STARTING_VALUE;
+        this.numCorrectFirstAttempt = STARTING_VALUE;
+        this.numCorrectSecondAttempt = STARTING_VALUE;
+        this.numIncorrectTwoAttempts = STARTING_VALUE;
     }
 
     /**
      * Helper function for the formattedDateTime
      * @return the formatted date time as a String
      */
-    public String getFormattedDateTime()
-    {
-        return formattedDateTime;
-    }
+    public String getFormattedDateTime(){ return formattedDateTime; }
 
-    /*
-     * Inserts all necessary data into the scoreList ArrayList.
-     * To be printed later.
+    /**
+     * Gets the Number of Games Played.
+     * @return the number of games played as an int.
      */
-    private void setupScoreList() {
-        final int currentTotalScore = getTotalScore();
-        pastTotalScoresList.add(currentTotalScore); // Add the current score to the list
+    public int getNumGamesPlayed(){ return numGamesPlayed; }
 
-        scoreList.clear(); // Clear the scoreList to avoid appending old data
-        scoreList.add("Date and Time: " + getFormattedDateTime());
-        scoreList.add("Games Played: " + numGamesPlayed);
-        scoreList.add("Correct First Attempts: " + numCorrectFirstAttempt);
-        scoreList.add("Correct Second Attempts: " + numCorrectSecondAttempt);
-        scoreList.add("Incorrect Attempts: " + numIncorrectTwoAttempts);
-        scoreList.add("Total Score: " + currentTotalScore + " points");
-        scoreList.add("Average Score: " + calcAverageScore() + " points/game"); // Calculate and display the average
-    }
-
-    /*
-     * Calculates the Average Score.
-     * @return the average score as an int.
+    /**
+     * Gets the number of questions answered
+     * correctly on the first attempt
+     * @return the number representing the
+     * correct answers as an int.
      */
-    private int calcAverageScore()
-    {
-        int total;
-        total = STARTING_SCORE;
-        for (final int score : pastTotalScoresList)
-        {
-            total += score;
-        }
+    public int getNumCorrectFirstAttempt(){ return numCorrectFirstAttempt; }
 
-        return total / pastTotalScoresList.size();
-    }
+    /**
+     * Gets the number of questions answered
+     * correctly on the second attempt
+     * @return the number representing the
+     * correct answers as an int.
+     */
+    public int getNumCorrectSecondAttempt(){ return numCorrectSecondAttempt; }
+
+    /**
+     * Gets the number of questions answered
+     * incorrectly after all attempts used.
+     * @return the number representing the incorrect
+     * answers as an int.
+     */
+    public int getNumIncorrectTwoAttempts(){ return numIncorrectTwoAttempts; }
 
     /*
      * Calculates the total score.
      * @return the totalScore as an int.
      */
-    public int getTotalScore()
-    {
+    public int getScore(){
         int total;
         total = ((numCorrectFirstAttempt) * NUM_CORRECT_FIRST_ATTEMPT_MULTIPLIER) +
                 numCorrectSecondAttempt;
@@ -98,91 +110,50 @@ public class Score
         return total;
     }
 
-    /*
+    /**
      * Writes the score to the file.
-     * @param outputFilePath
+     *
+     * @param score      as a Score object.
+     * @param outputFileName as a String.
      */
-    private void writeToScoreFile(final Path outputFilePath) {
-        setupScoreList(); // Set up the score list with current stats
-
-        try {
-            // Append the score data to the file
-            Files.write(outputFilePath, scoreList, StandardOpenOption.APPEND);
-            Files.writeString(outputFilePath, System.lineSeparator(), StandardOpenOption.APPEND);
-        } catch(IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Increments the numGamesPlayed.
-     */
-    public void incrementGamesPlayed()
+    public static void appendScoreToFile(final Score score, final String outputFileName) throws IOException
     {
-        this.numGamesPlayed++;
+        ScoreHandler.appendScoreToFile(score, outputFileName);
     }
 
     /**
-     * Sets the numCorrectFirstAttempt.
-     * @param numCorrectFirstAttempt as an int.
+     * Reads the scores from the File, and stores it as a Score Array
+     * @param inputFileName as a String.
+     * @return List<Score> of all the Scores in the file.
+     * @throws IOException if file could not be parsed.
      */
-    public void setNumCorrectFirstAttempt(final int numCorrectFirstAttempt)
+    public static List<Score> readScoresFromFile(final String inputFileName) throws IOException
     {
-        this.numCorrectFirstAttempt = numCorrectFirstAttempt;
+        return ScoreHandler.readScoresFromFile(inputFileName);
     }
 
     /**
-     * Sets the numCorrectSecondAttempt.
-     * @param numCorrectSecondAttempt as an int.
+     * The toString method for Score
+     * @return the details of Score as a String.
      */
-    public void setNumCorrectSecondAttempt(final int numCorrectSecondAttempt)
+    @Override
+    public String toString()
     {
-        this.numCorrectSecondAttempt = numCorrectSecondAttempt;
+        final LocalDateTime dateTime;
+        dateTime = LocalDateTime.now();
+        return String.format(
+                "Date and Time: %s\n" +
+                "Games Played: %d\n" +
+                "Correct First Attempts: %d\n" +
+                "Correct Second Attempts: %d\n" +
+                "Incorrect Attempts: %d\n" +
+                "Score: %d points\n",
+                dateTime.format(formatter),
+                numGamesPlayed,
+                numCorrectFirstAttempt,
+                numCorrectSecondAttempt,
+                numIncorrectTwoAttempts,
+                getScore()
+        );
     }
-
-    /**
-     * Sets the numIncorrectTwoAttempts.
-     * @param numIncorrectTwoAttempts as an int.
-     */
-    public void setNumIncorrectTwoAttempts(final int numIncorrectTwoAttempts)
-    {
-        this.numIncorrectTwoAttempts = numIncorrectTwoAttempts;
-    }
-
-    /**
-     * Create the Score file, if it hasn't been created already.
-     */
-    public void createScoreFile() {
-        final Path scoreFileDirectory = Paths.get(OUTPUT_DIRECTORY);
-        final Path scoreFile = Paths.get(OUTPUT_FILE);
-
-        // Create directory if it doesn't exist
-        if (Files.notExists(scoreFileDirectory)) {
-            try {
-                Files.createDirectory(scoreFileDirectory);
-            } catch(IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        // Create file if it doesn't exist
-        if (Files.notExists(scoreFile)) {
-            try {
-                Files.createFile(scoreFile);
-                System.out.println("Output file created. Writing initial score data...");
-                // Only write initial score when the file is first created
-                setupScoreList(); // Prepare the current data
-                writeToScoreFile(scoreFile); // Write initial data to the file
-            } catch(IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            System.out.println("Output file already exists. Appending new score...");
-        }
-
-        // Append new score data (Do not write initial score again)
-        setupScoreList(); // Prepare the current data
-        writeToScoreFile(scoreFile); // Append the updated score to the file
-    }
-
 }

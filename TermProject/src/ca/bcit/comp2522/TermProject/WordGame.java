@@ -73,13 +73,13 @@ public class WordGame
 
             switch (choice.toLowerCase())
             {
-                case "y" -> score.incrementGamesPlayed();
-                case "n" -> {
-                    printQuitMessage();
-                    score.createScoreFile();
-                    isPlaying = false;
-                }
-                default -> System.out.println("Error.");
+//                case "y" -> score.incrementGamesPlayed();
+//                case "n" -> {
+//                    printQuitMessage();
+//                    score.createScoreFile("score.txt");
+//                    isPlaying = false;
+//                }
+//                default -> System.out.println("Error.");
             }
         }
 
@@ -256,14 +256,14 @@ public class WordGame
             }
         }
 
-        if (score.getTotalScore() < currentHighest)
+        if (score.getScore() < currentHighest)
         {
             System.out.println("You did not beat the high score of " + currentHighest
                     + " points per game from " + formatDateTimeScore(dateAndTimes.get(highscoreIndex)));
         }
         else
         {
-            System.out.println("CONGRATULATIONS! You are the new high score with an average of " + score.getTotalScore()
+            System.out.println("CONGRATULATIONS! You are the new high score with an average of " + score.getScore()
                     + " points per game from " + score.getFormattedDateTime());
         }
     }
@@ -312,17 +312,17 @@ public class WordGame
      */
     private void handleUpdateScoreObject(final int key)
     {
-        if (key == CORRECT_ON_FIRST_ATTEMPT) {
-            score.setNumCorrectFirstAttempt(attempts.get(key));
-        }
-
-        if (key == CORRECT_ON_SECOND_ATTEMPT) {
-            score.setNumCorrectSecondAttempt(attempts.get(key));
-        }
-
-        if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
-            score.setNumIncorrectTwoAttempts(attempts.get(key));
-        }
+//        if (key == CORRECT_ON_FIRST_ATTEMPT) {
+//            score.setNumCorrectFirstAttempt(attempts.get(key));
+//        }
+//
+//        if (key == CORRECT_ON_SECOND_ATTEMPT) {
+//            score.setNumCorrectSecondAttempt(attempts.get(key));
+//        }
+//
+//        if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
+//            score.setNumIncorrectTwoAttempts(attempts.get(key));
+//        }
     }
 
     /*

@@ -9,7 +9,6 @@ import java.io.IOException;
 
 /**
  * NumberGame is the Number game.
- *
  * @author Vincent Fung
  * @version 2024
  */
@@ -18,11 +17,9 @@ public class NumberGame extends Application
     private final static int WIDTH = 800;
     private final static int HEIGHT = 600;
     private final Board board;
-    private Score score;
 
     {
         board = new Board();
-        score = new Score();
     }
 
     /**
