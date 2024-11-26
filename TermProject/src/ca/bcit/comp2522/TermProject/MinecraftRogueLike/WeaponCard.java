@@ -1,19 +1,17 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
 /**
  * Represents a card that represents a weapon in the game.
  * @author Vincent Fung
  * @version 2024
  */
-public class WeaponCard implements Card {
-    private final String name;
-
+public class WeaponCard extends Card {
     /**
      * Constructs a {@code WeaponCard} with the specified name.
      * @param name the name of the weapon card
      */
     public WeaponCard(final String name) {
-        this.name = name;
+        super(name);
     }
 
     /**
@@ -21,7 +19,7 @@ public class WeaponCard implements Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(name + " (Weapon)");
+        System.out.println(super.getName() + " (Weapon)");
     }
 
     /**
@@ -30,6 +28,6 @@ public class WeaponCard implements Card {
      */
     @Override
     public String toString() {
-        return name + " (Weapon)";
+        return super.getName() + " (Weapon)";
     }
 }

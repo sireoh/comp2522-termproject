@@ -1,13 +1,13 @@
-lesson 1: initializers in class X
+lesson 1: initializers in class GameHandler
 overloading in class DeckEmptyException
 
 lesson 2: inheritance in class Card and TokenCard
 exceptions in class DeckEmptyException and InvalidCardTypeException
 
 lesson 3: overriding in class TokenCard
-substitution in class D
+substitution in class GameHandler
 
-lesson 4: abstract methods in class B
+lesson 4: abstract methods in class NULL
 abstract classes in class E
 
 lesson 5: collections in class GameHandler

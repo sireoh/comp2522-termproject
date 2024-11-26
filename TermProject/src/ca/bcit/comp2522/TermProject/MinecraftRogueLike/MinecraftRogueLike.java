@@ -1,4 +1,4 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 import java.util.List;
 
 /**
@@ -6,14 +6,15 @@ import java.util.List;
  * @author Vincent Fung
  * @version 2024
  */
-public class MyGame {
+public class MinecraftRogueLike
+{
     private final List<Card> deck;
     private final List<Card> hand;
 
     /**
      * Initialises the deck and hand.
      */
-    public MyGame()
+    public MinecraftRogueLike()
     {
         deck = CardFactory.generateDeck();
         hand = GameHandler.generateHand(deck);
@@ -58,9 +59,11 @@ public class MyGame {
      * @param args unused.
      */
     public static void main(final String[] args) {
-        MyGame game = new MyGame();
+        MinecraftRogueLike game = new MinecraftRogueLike();
         System.out.println("Welcome to MINECRAFT ROGUELIKE");
         System.out.println("Here is your current hand");
         game.printHandDetails();
+
+        GameHandler.swapCardOfType(game.getHand(), game.getDeck(), WeaponCard.class);
     }
 }

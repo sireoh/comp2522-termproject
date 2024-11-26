@@ -1,19 +1,17 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
 /**
  * Represents a card associated with an event in the game.
  * @author Vincent Fung
  * @version 2024
  */
-public class EventCard implements Card {
-    private final String name;
-
+public class EventCard extends Card {
     /**
      * Constructs an {@code EventCard} with the specified name.
      * @param name the name of the event card
      */
     public EventCard(final String name) {
-        this.name = name;
+        super(name);
     }
 
     /**
@@ -21,7 +19,7 @@ public class EventCard implements Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(name + " (Event)");
+        System.out.println(super.getName() + " (Event)");
     }
 
     /**
@@ -30,6 +28,6 @@ public class EventCard implements Card {
      */
     @Override
     public String toString() {
-        return name + " (Event)";
+        return super.getName() + " (Event)";
     }
 }

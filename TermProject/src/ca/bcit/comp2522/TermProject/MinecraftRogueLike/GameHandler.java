@@ -1,15 +1,17 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Handles game-related operations such as managing the deck and player hands.
  */
 public class GameHandler {
+    private final static Scanner scanner;
+
+    static {
+        scanner = new Scanner(System.in);
+    }
 
     /**
      * Generates a hand of unique card types from the deck.
@@ -49,5 +51,29 @@ public class GameHandler {
 
         drawnCard = ((LinkedList<Card>) deck).removeFirst();
         hand.add(drawnCard);
+    }
+
+    /**
+     * Swaps an item in the hand with a similar item in the deck.
+     * @param hand as the List representing the current hand.
+     * @param deck as the List representing remaining cards in the deck.
+     * @param type as the type of card.
+     */
+    public static void swapCardOfType(final List<Card> hand, final List<Card> deck, final Class<? extends Card> type) {
+        final Card drawnCard;
+        final List<Card> filteredCards;
+        final String option;
+
+        if (deck.isEmpty()) {
+            throw new DeckEmptyException();
+        }
+
+        filteredCards = deck.stream()
+                .filter(type::isInstance)
+                .toList();
+
+        System.out.println("Which card would you like to get?");
+        filteredCards.forEach(card -> System.out.println("- " + card.toString()));
+        option = scanner.nextLine();
     }
 }

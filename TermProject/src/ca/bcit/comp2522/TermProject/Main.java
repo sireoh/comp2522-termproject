@@ -1,6 +1,6 @@
 package ca.bcit.comp2522.TermProject;
 
-import ca.bcit.comp2522.TermProject.MyGame.MyGame;
+import ca.bcit.comp2522.TermProject.MinecraftRogueLike.MinecraftRogueLike;
 
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class Main
         NumberGame ng;
 
         WordGame wg;
-        MyGame mg;
+        MinecraftRogueLike mg;
         scan = new Scanner(System.in);
 
         String option;
@@ -47,7 +47,7 @@ public class Main
                     }
                     case "m" -> {
                         System.out.println("Starting the minecraft game.");
-                        mg = new MyGame();
+                        mg = new MinecraftRogueLike();
                     }
                     default -> System.out.println("please enter a valid character.");
                 }

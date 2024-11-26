@@ -1,19 +1,17 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
 /**
  * Represents a card that acts as a token in the game.
  * @author Vincent Fung
  * @version 2024
  */
-public class TokenCard implements Card {
-    private final String name;
-
+public class TokenCard extends Card {
     /**
      * Constructs a {@code TokenCard} with the specified name.
      * @param name the name of the token card
      */
     public TokenCard(final String name) {
-        this.name = name;
+        super(name);
     }
 
     /**
@@ -21,7 +19,7 @@ public class TokenCard implements Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(name + " (Token)");
+        System.out.println(super.getName() + " (Token)");
     }
 
     /**
@@ -30,6 +28,6 @@ public class TokenCard implements Card {
      */
     @Override
     public String toString() {
-        return name + " (Token)";
+        return super.getName() + " (Token)";
     }
 }

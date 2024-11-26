@@ -1,4 +1,4 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
 /**
  * Represents an exception that is thrown when an invalid card type is encountered.

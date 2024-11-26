@@ -1,4 +1,4 @@
-package ca.bcit.comp2522.TermProject.MyGame;
+package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
 import java.io.BufferedReader;
 import java.io.IOException;
