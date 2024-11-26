@@ -60,9 +60,11 @@ public class GameHandler {
      * @param type as the type of card.
      */
     public static void swapCardOfType(final List<Card> hand, final List<Card> deck, final Class<? extends Card> type) {
-        final Card drawnCard;
+        Card drawnCard;
         final List<Card> filteredCards;
-        final String option;
+        final String cardToSwap;
+
+        drawnCard = null;
 
         if (deck.isEmpty()) {
             throw new DeckEmptyException();
@@ -72,8 +74,35 @@ public class GameHandler {
                 .filter(type::isInstance)
                 .toList();
 
-        System.out.println("Which card would you like to get?");
         filteredCards.forEach(card -> System.out.println("- " + card.toString()));
-        option = scanner.nextLine();
+        cardToSwap = scanner.nextLine();
+
+        for (final Card card : filteredCards)
+        {
+            if (card.getName().equals(cardToSwap))
+            {
+                System.out.println("Swapping " + cardToSwap + " with " + card.toString());
+                drawnCard = card;
+                removeCardByName(deck, drawnCard.getName());
+                hand.add(drawnCard);
+            }
+        }
+
+        if (drawnCard != null)
+        {
+            drawnCard.printDetails();
+        }
+    }
+
+    /*
+     * Helper function removes the card from the deck.
+     * @param deck as the deck to remove from.
+     */
+    private static void removeCardByName(final List<Card> deck, final String cardName)
+    {
+        deck.stream()
+                .filter(card -> card.getName().equals(cardName))
+                .findFirst()
+                .ifPresent(deck::remove);
     }
 }

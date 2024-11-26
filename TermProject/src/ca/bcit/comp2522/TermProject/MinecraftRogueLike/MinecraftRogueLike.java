@@ -60,10 +60,5 @@ public class MinecraftRogueLike
      */
     public static void main(final String[] args) {
         MinecraftRogueLike game = new MinecraftRogueLike();
-        System.out.println("Welcome to MINECRAFT ROGUELIKE");
-        System.out.println("Here is your current hand");
-        game.printHandDetails();
-
-        GameHandler.swapCardOfType(game.getHand(), game.getDeck(), WeaponCard.class);
     }
 }
