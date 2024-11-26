@@ -1,19 +1,27 @@
-lesson 1: classes, modifiers, overloading, static, constructors, strings, comments and conventions
+lesson 1: initializers in class X
+overloading in class DeckEmptyException
 
-lesson 2: inheritance, exception handling, scanner, files
+lesson 2: inheritance in class Card and TokenCard
+exceptions in class DeckEmptyException and InvalidCardTypeException
 
-lesson 3: polymorphism, overriding, casting, substitution, final methods, final classes
+lesson 3: overriding in class TokenCard
+substitution in class D
 
-lesson 4: abstract methods, abstract classes, interfaces, functional interfaces, equals(), comparable
+lesson 4: abstract methods in class B
+abstract classes in class E
 
-lesson 5: arrays, lists, maps, interators, collections
+lesson 5: collections in class GameHandler
+iterator in class G
 
-lesson 6: lambda expressions, method references, inner classes
+lesson 6: lambda expressions in class B
+method references in class GameHandler
+nested classes in class F
 
-lesson 7: random, streaming and filtering
+lesson 8: scanner in class MyGame
+file in class A
 
-lesson 8: graphical user interfaces
+lesson 9: streams and filters in class GameHandler
 
-lesson 9: unit testing, debugger, and UML
-
-lesson 10: memory, singleton, and design patterns
+lesson 10: unit tests in class BTest
+lesson 11: design pattern in class CardFactory
+lesson 12: concurrency in class X

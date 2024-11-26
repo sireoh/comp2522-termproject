@@ -1,6 +1,6 @@
 package ca.bcit.comp2522.TermProject;
 
-import javafx.application.Application;
+import ca.bcit.comp2522.TermProject.MyGame.MyGame;
 
 import java.util.Scanner;
 

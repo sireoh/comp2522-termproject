@@ -1,0 +1,13 @@
+WaterBucket|TokenCard
+EnderPearls|TokenCard
+FlintAndSteel|TokenCard
+EnchantedNetheriteSword|WeaponCard
+StoneSword|WeaponCard
+Bow|WeaponCard
+EnderDragon|EventCard
+LavaPool|EventCard
+Blaze|EventCard
+DiamondPick|ActivatableCard
+IronOre|ActivatableCard
+TotemOfUndying|ActivatableCard
+GoldIngots|ActivatableCard
