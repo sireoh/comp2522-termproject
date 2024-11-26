@@ -14,4 +14,10 @@ public class ActivatableCard implements Card
     {
         System.out.println(name + " (Activatable)");
     }
+
+    @Override
+    public String toString()
+    {
+        return name + " (Activatable)";
+    }
 }

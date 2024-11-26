@@ -14,4 +14,10 @@ public class WeaponCard implements Card
     {
         System.out.println(name + " (Weapon)");
     }
+
+    @Override
+    public String toString()
+    {
+        return name + " (Weapon)";
+    }
 }

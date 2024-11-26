@@ -16,23 +16,21 @@ public class GameHandler
                         (existing, replacement) -> existing));
         generatedHand = new ArrayList<>(hand.values());
 
-        System.out.println("Heres ur hand");
-        generatedHand.forEach(Card::printDetails);
-
-        System.out.println("\nCurrent state of deck.");
         deck.removeAll(hand.values());
-        deck.forEach(Card::printDetails);
 
         return generatedHand;
     }
 
-    public static Card drawCard(List<Card> deck)
+    public static void drawCard(final List<Card> hand, final List<Card> deck)
     {
+        final Card drawnCard;
+
         if (deck.isEmpty())
         {
             throw new DeckEmptyException();
         }
 
-        return null;
+        drawnCard = deck.removeFirst();
+        hand.add(drawnCard);
     }
 }

@@ -14,4 +14,10 @@ public class TokenCard implements Card
     {
         System.out.println(name + " (Token)");
     }
+
+    @Override
+    public String toString()
+    {
+        return name + " (Token)";
+    }
 }

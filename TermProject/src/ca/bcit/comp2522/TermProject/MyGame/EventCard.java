@@ -14,4 +14,10 @@ public class EventCard implements Card
     {
         System.out.println(name + " (Event)");
     }
+
+    @Override
+    public String toString()
+    {
+        return name + " (Event)";
+    }
 }
