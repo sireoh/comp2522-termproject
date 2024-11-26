@@ -49,7 +49,7 @@ public class GameHandler {
             throw new DeckEmptyException();
         }
 
-        drawnCard = ((LinkedList<Card>) deck).removeFirst();
+        drawnCard = deck.removeFirst();
         hand.add(drawnCard);
     }
 
@@ -60,37 +60,76 @@ public class GameHandler {
      * @param type as the type of card.
      */
     public static void swapCardOfType(final List<Card> hand, final List<Card> deck, final Class<? extends Card> type) {
-        Card drawnCard;
-        final List<Card> filteredCards;
-        final String cardToSwap;
-
-        drawnCard = null;
+        final Card chosenCardFromHand;
+        final Card chosenCardFromDeck;
+        final List<Card> filteredDeck;
+        final List<Card> filteredHand;
 
         if (deck.isEmpty()) {
             throw new DeckEmptyException();
         }
 
-        filteredCards = deck.stream()
+        filteredDeck = deck.stream()
                 .filter(type::isInstance)
                 .toList();
 
-        filteredCards.forEach(card -> System.out.println("- " + card.toString()));
-        cardToSwap = scanner.nextLine();
+        filteredHand = hand.stream()
+                .filter(type::isInstance)
+                .toList();
 
-        for (final Card card : filteredCards)
-        {
-            if (card.getName().equals(cardToSwap))
-            {
-                System.out.println("Swapping " + cardToSwap + " with " + card.toString());
-                drawnCard = card;
-                removeCardByName(deck, drawnCard.getName());
-                hand.add(drawnCard);
-            }
-        }
+        chosenCardFromHand = promptCardToSwap(filteredHand);
+        chosenCardFromDeck = promptCardToSwap(filteredDeck);
 
-        if (drawnCard != null)
-        {
-            drawnCard.printDetails();
+        removeCardByName(deck, chosenCardFromHand.getName());
+        hand.add(chosenCardFromDeck);
+    }
+
+    /*
+     * Helper function that helps prompt the card to swap.
+     * @param hand as the hand to update
+     * @param deck as the deck to update
+     */
+    private static Card promptCardToSwap(final List<Card> cardsToChooseFrom)
+    {
+        final int choice;
+        final Card chosenCard;
+
+        System.out.println("Which card would you like to swap?");
+        generateOptionsList(cardsToChooseFrom);
+
+        choice = makeChoice(0, cardsToChooseFrom.size());
+        chosenCard = cardsToChooseFrom.get(choice-1);
+
+        System.out.println("You chose: " + choice);
+        System.out.println("- " + chosenCard);
+
+        return chosenCard;
+    }
+
+    /*
+     * Updates the Hand and Deck
+     * @param hand as the hand to update
+     * @param deckToUpdate as the deck to update
+     * @param chosenCard as the card to add to hand
+     */
+    private static void updateHandAndDeck(final List<Card> hand, final List<Card> deckToUpdate, final Card chosenCard)
+    {
+        removeCardByName(deckToUpdate, chosenCard.getName());
+        hand.add(chosenCard);
+    }
+
+    /*
+     * Generates a menu that shows what's available in the list.
+     * @param cardsToChooseFrom as the list of cards to choose from.
+     */
+    private static void generateOptionsList(final List<Card> cardsToChooseFrom) {
+        Card cardOption;
+        System.out.println("Choose a card:");
+
+        // Iterate through the list of cards and print the options in the desired format
+        for (int i = 0; i < cardsToChooseFrom.size(); i++) {
+            cardOption = cardsToChooseFrom.get(i);
+            System.out.println((i + 1) + " - " + cardOption.getName());
         }
     }
 
@@ -104,5 +143,32 @@ public class GameHandler {
                 .filter(card -> card.getName().equals(cardName))
                 .findFirst()
                 .ifPresent(deck::remove);
+    }
+
+    /*
+     * Helper function that loops and helps with choices
+     * @param lowerBound as the lower bound option.
+     * @param upperBound as the upper bound option.
+     * @return the choice, once valid.
+     */
+    public static int makeChoice(final int lowerBound, final int upperBound)
+    {
+        while(true)
+        {
+            try
+            {
+                int choice = Integer.parseInt(scanner.nextLine().trim());
+                if(choice > lowerBound && choice <= upperBound)
+                {
+                    return choice;
+                } else
+                {
+                    System.out.println("Invalid choice, please choose again.");
+                }
+            } catch(NumberFormatException e)
+            {
+                System.out.println("Please enter a valid number.");
+            }
+        }
     }
 }
