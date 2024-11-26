@@ -80,7 +80,9 @@ public class GameHandler {
         chosenCardFromHand = promptCardToSwap(filteredHand);
         chosenCardFromDeck = promptCardToSwap(filteredDeck);
 
+        removeCardByName(hand, chosenCardFromHand.getName());
         removeCardByName(deck, chosenCardFromHand.getName());
+
         hand.add(chosenCardFromDeck);
     }
 
@@ -104,18 +106,6 @@ public class GameHandler {
         System.out.println("- " + chosenCard);
 
         return chosenCard;
-    }
-
-    /*
-     * Updates the Hand and Deck
-     * @param hand as the hand to update
-     * @param deckToUpdate as the deck to update
-     * @param chosenCard as the card to add to hand
-     */
-    private static void updateHandAndDeck(final List<Card> hand, final List<Card> deckToUpdate, final Card chosenCard)
-    {
-        removeCardByName(deckToUpdate, chosenCard.getName());
-        hand.add(chosenCard);
     }
 
     /*
