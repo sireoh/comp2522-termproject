@@ -80,8 +80,16 @@ public class GameHandler {
         chosenCardFromHand = promptCardToSwap(filteredHand);
         chosenCardFromDeck = promptCardToSwap(filteredDeck);
 
+        if (chosenCardFromHand == null ||
+            chosenCardFromDeck == null)
+        {
+            System.out.println("There are no items of that type for you to choose from.");
+            return;
+        }
+
+        // Removes the previous card from the hand and deck
         removeCardByName(hand, chosenCardFromHand.getName());
-        removeCardByName(deck, chosenCardFromHand.getName());
+        removeCardByName(deck, chosenCardFromDeck.getName());
 
         hand.add(chosenCardFromDeck);
     }
@@ -95,6 +103,11 @@ public class GameHandler {
     {
         final int choice;
         final Card chosenCard;
+
+        if (cardsToChooseFrom.isEmpty())
+        {
+            return null;
+        }
 
         System.out.println("Which card would you like to swap?");
         generateOptionsList(cardsToChooseFrom);
