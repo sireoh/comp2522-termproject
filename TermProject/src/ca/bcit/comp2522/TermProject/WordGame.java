@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,18 +34,18 @@ public class WordGame
     private final static int INCREMENT_AMOUNT = 1;
     private final static int RIGHT_SIDE = 1;
     private final Map<Integer, Integer> attempts;
-    private final Score score;
     private boolean isPlaying;
     private final Scanner scanner;
     private final Path inputFilePath;
-    private static final String INPUT_FILE = "output/score.txt";
+    private static final String OUTPUT_FILE = "scoreFile/score.txt";
     private final List<Integer> totalScores;
     private final List<String> dateAndTimes;
+    private int gamesPlayed;
 
     public WordGame()
     {
-
         final World world;
+        final LocalDateTime currentTime;
         attempts = new HashMap<>();
         attempts.put(CORRECT_ON_FIRST_ATTEMPT, START_INDEX);
         attempts.put(CORRECT_ON_SECOND_ATTEMPT, START_INDEX);
@@ -52,11 +54,11 @@ public class WordGame
         isPlaying = true;
         String choice;
 
-        inputFilePath = Paths.get(INPUT_FILE);
+        gamesPlayed = START_INDEX;
+        inputFilePath = Paths.get(OUTPUT_FILE);
         world = new World();
         countries = world.getCountries();
         questions = generateQuestions();
-        score = new Score();
         totalScores = new ArrayList<>();
         dateAndTimes = new ArrayList<>();
 
@@ -73,13 +75,23 @@ public class WordGame
 
             switch (choice.toLowerCase())
             {
-//                case "y" -> score.incrementGamesPlayed();
-//                case "n" -> {
-//                    printQuitMessage();
-//                    score.createScoreFile("score.txt");
-//                    isPlaying = false;
-//                }
-//                default -> System.out.println("Error.");
+                case "y" -> gamesPlayed++;
+                case "n" -> {
+                    printQuitMessage();
+                    try {
+                        final Score scoreToAdd;
+                        scoreToAdd = new Score(LocalDateTime.now(),
+                                gamesPlayed,
+                                attempts.get(CORRECT_ON_FIRST_ATTEMPT),
+                                attempts.get(CORRECT_ON_SECOND_ATTEMPT),
+                                attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS));
+                        ScoreHandler.appendScoreToFile(scoreToAdd, OUTPUT_FILE);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    isPlaying = false;
+                }
+                default -> System.out.println("Error.");
             }
         }
 
@@ -165,7 +177,6 @@ public class WordGame
      */
     private void printScore()
     {
-        final StringBuilder sb;
         final Set<Integer> keyList;
         keyList = attempts.keySet();
 
@@ -181,11 +192,7 @@ public class WordGame
             if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
                 System.out.println(attempts.get(key) + " incorrect answers on the two attempts each.");
             }
-
-            handleUpdateScoreObject(key);
         }
-
-        sb = new StringBuilder();
     }
 
     /*
@@ -256,15 +263,22 @@ public class WordGame
             }
         }
 
-        if (score.getScore() < currentHighest)
+        final Score temp;
+        temp = new Score(LocalDateTime.now(),
+                gamesPlayed,
+                attempts.get(CORRECT_ON_FIRST_ATTEMPT),
+                attempts.get(CORRECT_ON_SECOND_ATTEMPT),
+                attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS));
+
+        if (temp.getScore() < currentHighest)
         {
             System.out.println("You did not beat the high score of " + currentHighest
                     + " points per game from " + formatDateTimeScore(dateAndTimes.get(highscoreIndex)));
         }
         else
         {
-            System.out.println("CONGRATULATIONS! You are the new high score with an average of " + score.getScore()
-                    + " points per game from " + score.getFormattedDateTime());
+            System.out.println("CONGRATULATIONS! You are the new high score with an average of " + temp.getScore()
+                    + " points per game from " + temp.getFormattedDateTime());
         }
     }
 
@@ -304,25 +318,6 @@ public class WordGame
                 .toLowerCase()
                 + randomFact
                 .substring(END_INDEX_RANDOM_FACT_FIRST_LETTER);
-    }
-
-    /**
-     * Handles the updating of the score object.
-     * @param key as the key of the attempts hashmap.
-     */
-    private void handleUpdateScoreObject(final int key)
-    {
-//        if (key == CORRECT_ON_FIRST_ATTEMPT) {
-//            score.setNumCorrectFirstAttempt(attempts.get(key));
-//        }
-//
-//        if (key == CORRECT_ON_SECOND_ATTEMPT) {
-//            score.setNumCorrectSecondAttempt(attempts.get(key));
-//        }
-//
-//        if (key == INCORRECT_AFTER_TWO_ATTEMPTS) {
-//            score.setNumIncorrectTwoAttempts(attempts.get(key));
-//        }
     }
 
     /*

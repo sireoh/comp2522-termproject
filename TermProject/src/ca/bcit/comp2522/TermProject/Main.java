@@ -11,16 +11,22 @@ import java.util.Scanner;
  */
 public class Main
 {
+    private final static Scanner scanner;
+
+    static {
+        scanner = new Scanner(System.in);
+    }
+
     public static void main(String[] args)
     {
         final Scanner scan;
-        NumberGame ng;
+        final NumberGame ng;
+        boolean isStillPlaying;
 
+        isStillPlaying = true;
         WordGame wg;
-        MinecraftRogueLike mg;
+        MinecraftRogueLike mcrl;
         scan = new Scanner(System.in);
-
-        String option;
 
        do
        {
@@ -30,64 +36,51 @@ public class Main
            System.out.println("Press M to play the Minecraft game.");
            System.out.println("Press Q to quit.");
 
-           option = scan.nextLine();
-           option = option.toLowerCase();
-
-           if (validateChoice(option) && !option.equals("q"))
+           switch(makeChoice())
            {
-                switch(option)
-                {
-                    case "w" -> {
-                        System.out.println("Starting the word game.");
-                        wg = new WordGame();
-                    }
-                    case "n" -> {
-                        System.out.println("Starting the number game.");
-                        NumberGame.main(new String[]{});
-                    }
-                    case "m" -> {
-                        System.out.println("Starting the minecraft game.");
-                        mg = new MinecraftRogueLike();
-                    }
-                    default -> System.out.println("please enter a valid character.");
-                }
+               case "w" -> {
+                   System.out.println("Starting the word game.");
+                   wg = new WordGame();
+               }
+               case "n" -> {
+                   System.out.println("Starting the number game.");
+                   NumberGame.main(new String[]{});
+               }
+               case "m" -> {
+                   System.out.println("Starting the minecraft game.");
+                   mcrl = new MinecraftRogueLike();
+               }
+               case "q" -> {
+                   System.out.println("Thanks for playing !!!");
+                   isStillPlaying = false;
+               }
+               default -> System.out.println("please enter a valid character.");
            }
-           else
-           {
-               System.out.println("Chosen option must be either W, N, M or Q.");
-           }
-       } while (!option.equalsIgnoreCase("Q") && !validateChoice(option));
-
-        if (option.equalsIgnoreCase("q")) {
-            System.out.println("Thanks for playing !!!");
-        }
+       } while (isStillPlaying);
 
         scan.close();
     }
 
-    /**
-     * Validates if the input is blank, empty or does not contain
-     * W, N, M or Q.
-     * @param option as a string.
-     * @return true only if it fails the check.
+    /*
+     * Helper function that create the choice menu
+     * @return the String representing the users decision
      */
-    private static boolean validateChoice(final String option)
+    private static String makeChoice()
     {
-        if (option == null || option.isBlank())
+        while(true)
         {
-            return false;
+            final String option;
+            option = scanner.nextLine().trim();
+            if(!(option.equalsIgnoreCase("W") ||
+                 option.equalsIgnoreCase("N") ||
+                 option.equalsIgnoreCase("M") ||
+                 option.equalsIgnoreCase("Q")))
+            {
+                return option;
+            } else
+            {
+                System.out.println("Chosen option must be either W, N, M or Q.");
+            }
         }
-
-        if (
-                !(option.equalsIgnoreCase("W") ||
-                option.equalsIgnoreCase("N") ||
-                option.equalsIgnoreCase("M") ||
-                option.equalsIgnoreCase("Q"))
-        )
-        {
-            return false;
-        }
-
-        return true;
     }
 }

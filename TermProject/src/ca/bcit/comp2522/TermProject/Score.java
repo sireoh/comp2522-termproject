@@ -15,7 +15,7 @@ public class Score
     private final DateTimeFormatter formatter;
     private final String formattedDateTime;
 
-    private final int numGamesPlayed;
+    private int numGamesPlayed;
     private final int numCorrectFirstAttempt;
     private final int numCorrectSecondAttempt;
     private final int numIncorrectTwoAttempts;
@@ -108,6 +108,14 @@ public class Score
                 numCorrectSecondAttempt;
 
         return total;
+    }
+
+    /**
+     * Increments the games played.
+     */
+    public void incrementGamesPlayed()
+    {
+        numGamesPlayed++;
     }
 
     /**
