@@ -45,7 +45,7 @@ class ScoreTest {
         assertEquals(expected, score.toString(), "The toString format should match the expected format.");
     }
 
-//    @Test
+    @Test
     void testAppendAndRetrieveLargeNumberOfScores() throws IOException {
         // Create 25 scores and write them to the file
         for (int i = 0; i < 25; i++) {
@@ -64,7 +64,7 @@ class ScoreTest {
         }
     }
 
-//    @Test
+    @Test
     void testCheckForNewHighScore() throws IOException {
         // Create some initial scores and add them to the file
         Score score1 = new Score(LocalDateTime.now(), 1, 6, 2, 1); // 14 points
@@ -84,7 +84,7 @@ class ScoreTest {
         assertEquals(19, highScore, "The highest score should still be 19 points.");
     }
 
-//    @Test
+    @Test
     void testNewHighScore() throws IOException {
         // Create some initial scores and add them to the file
         Score score1 = new Score(LocalDateTime.now(), 1, 6, 2, 1); // 14 points
@@ -104,7 +104,7 @@ class ScoreTest {
         assertEquals(21, highScore, "The highest score should now be 21 points.");
     }
 
-//    @Test
+    @Test
     void testAppendAndCheckMultipleReads() throws IOException {
         // Create initial scores and add them to the file
         for (int i = 0; i < 5; i++) {
