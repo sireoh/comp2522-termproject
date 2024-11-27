@@ -25,6 +25,7 @@ public class WordGame
     private final static int QUESTION_TYPE_WHICH_COUNTRY = 2;
     private final static int QUESTION_TYPE_SIZE = 3;
     private final static int START_INDEX = 0;
+    private final static int OFFSET = 1;
     private final static int STARTING_TOTAL = 0;
     private final static int MAX_TRIES = 2;
     private final static int END_INDEX_RANDOM_FACT_FIRST_LETTER = 1;
@@ -36,7 +37,7 @@ public class WordGame
     private final Map<Integer, Integer> attempts;
     private boolean isPlaying;
     private final Scanner scanner;
-    private final Path inputFilePath;
+    private Path inputFilePath;
     private static final String OUTPUT_FILE = "scoreFile/score.txt";
     private final List<Integer> totalScores;
     private final List<String> dateAndTimes;
@@ -62,7 +63,7 @@ public class WordGame
         totalScores = new ArrayList<>();
         dateAndTimes = new ArrayList<>();
 
-        printQuitMessage();
+        setupScoreFile();
 
         while (isPlaying) {
             play();
@@ -112,22 +113,22 @@ public class WordGame
         boolean isCorrect;
         int typeOfQuestion;
         int currentTry;
-        int currentAttempt;
         String randomFact;
+        String questionText;
+        int currentAttempt;
 
+        currentAttempt = STARTING_TOTAL;
         random = new Random();
         scan = new Scanner(System.in);
         typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
-        currentAttempt = START_INDEX;
         currentTry = START_INDEX;
         currentQuestion = START_INDEX;
-        isCorrect = false;
         randomFact = questions[currentQuestion].getRandomFact();
 
 
         while (currentQuestion < MAX_QUESTION_SIZE) {
             currentTry++;
-            System.out.println("Current Attempt: " + formatCurrentTry(currentTry));
+            System.out.println("Current Attempt: " + currentTry);
 
             System.out.println(
                     switch (typeOfQuestion) { // Ensure random number is between 0 and 2
@@ -136,7 +137,7 @@ public class WordGame
                         case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of " + questions[currentQuestion].getName() + "?";
                         default -> "No function called";
                     }
-                    + "\t" + questions[currentQuestion].getName() + ", " + questions[currentQuestion].getCapitalCityName()
+                            + "\t" + questions[currentQuestion].getName() + ", " + questions[currentQuestion].getCapitalCityName()
             );
 
             answer = scan.nextLine();
@@ -148,28 +149,27 @@ public class WordGame
                 default -> throw new IllegalStateException("Unexpected value: " + typeOfQuestion);
             }
 
-            if((isCorrect || currentTry >= MAX_TRIES)) {
+            if(isCorrect || currentTry >= MAX_TRIES) {
                 attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
-                printScore();
+                printScore(); // DEBUG
 
-                // Check if it has reached the max tries.
-                if (currentTry == INCORRECT_AFTER_TWO_ATTEMPTS)
+                typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
+                currentQuestion++;
+                randomFact = questions[currentQuestion].getRandomFact();
+
+                if (currentTry >= MAX_TRIES)
                 {
+                    attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
                     System.out.println("Ran out of tries, next question.");
                 }
-
-                // Otherwise go to next question.
-                typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
-                randomFact = questions[currentQuestion].getRandomFact();
-                currentQuestion++;
 
                 currentAttempt++;
                 currentTry = START_INDEX;
             } else {
                 System.out.println("Try again!");
-                currentTry++;
             }
         }
+
     }
 
     /*
@@ -270,7 +270,7 @@ public class WordGame
                 attempts.get(CORRECT_ON_SECOND_ATTEMPT),
                 attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS));
 
-        if (temp.getScore() < currentHighest)
+        if ((temp.getScore() < currentHighest))
         {
             System.out.println("You did not beat the high score of " + currentHighest
                     + " points per game from " + formatDateTimeScore(dateAndTimes.get(highscoreIndex)));
@@ -368,5 +368,26 @@ public class WordGame
         return questions.stream()
                 .limit(MAX_QUESTION_SIZE)
                 .toArray(Country[]::new);
+    }
+
+    /*
+     * Helper function, helps set up the score file
+     * if it doesn't exist already.
+     */
+    private void setupScoreFile()
+    {
+        // Ensure the directory exists and set the file path
+        try {
+            Path scoreDirectory = Paths.get("scoreFile");
+            Files.createDirectories(scoreDirectory); // Creates directory if it doesn't exist
+            inputFilePath = scoreDirectory.resolve("score.txt"); // Resolve the path to the file
+
+            if (!Files.exists(inputFilePath)) {
+                Files.createFile(inputFilePath); // Creates the file if it doesn't exist
+            }
+        } catch (IOException e) {
+            System.err.println("Error setting up score file: " + e.getMessage());
+            throw new RuntimeException("Could not initialize score file", e);
+        }
     }
 }

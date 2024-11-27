@@ -71,7 +71,7 @@ public class Main
         {
             final String option;
             option = scanner.nextLine().trim();
-            if(!(option.equalsIgnoreCase("W") ||
+            if((option.equalsIgnoreCase("W") ||
                  option.equalsIgnoreCase("N") ||
                  option.equalsIgnoreCase("M") ||
                  option.equalsIgnoreCase("Q")))
