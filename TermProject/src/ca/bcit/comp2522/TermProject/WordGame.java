@@ -27,7 +27,7 @@ public class WordGame
     private final static int START_INDEX = 0;
     private final static int OFFSET = 1;
     private final static int STARTING_TOTAL = 0;
-    private final static int MAX_TRIES = 2;
+    private final static int MAX_ATTEMPT_SIZE = 3;
     private final static int END_INDEX_RANDOM_FACT_FIRST_LETTER = 1;
     private final static int CORRECT_ON_FIRST_ATTEMPT = 1;
     private final static int CORRECT_ON_SECOND_ATTEMPT = 2;
@@ -42,6 +42,9 @@ public class WordGame
     private final List<Integer> totalScores;
     private final List<String> dateAndTimes;
     private int gamesPlayed;
+    private static final int GAMES_PLAYED_STARTING_AMOUNT = 1;
+    private final Random random;
+    private int currentQuestionIndex;
 
     public WordGame()
     {
@@ -55,7 +58,9 @@ public class WordGame
         isPlaying = true;
         String choice;
 
-        gamesPlayed = START_INDEX;
+        currentQuestionIndex = START_INDEX;
+        random = new Random();
+        gamesPlayed = GAMES_PLAYED_STARTING_AMOUNT;
         inputFilePath = Paths.get(OUTPUT_FILE);
         world = new World();
         countries = world.getCountries();
@@ -91,85 +96,115 @@ public class WordGame
                         throw new RuntimeException(e);
                     }
                     isPlaying = false;
+                    scanner.close();
                 }
                 default -> System.out.println("Error.");
             }
         }
-
-        scanner.close();
     }
 
     /*
      * Begins the WordGame.
      */
-    private void play()
-    {
-        final Random random;
-        final Scanner scan;
-
-        // These get updated in the while loop.
-        int currentQuestion;
-        String answer;
-        boolean isCorrect;
+    private void play() {
+        int currentAttempt = START_INDEX;
         int typeOfQuestion;
-        int currentTry;
-        String randomFact;
-        String questionText;
-        int currentAttempt;
 
-        currentAttempt = STARTING_TOTAL;
-        random = new Random();
-        scan = new Scanner(System.in);
-        typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
-        currentTry = START_INDEX;
-        currentQuestion = START_INDEX;
-        randomFact = questions[currentQuestion].getRandomFact();
+        while (currentQuestionIndex < MAX_QUESTION_SIZE) {
+            System.out.println("Current Attempt: " + (currentAttempt + OFFSET));
 
+            // Randomize the question, and ask it.
+            typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
 
-        while (currentQuestion < MAX_QUESTION_SIZE) {
-            currentTry++;
-            System.out.println("Current Attempt: " + currentTry);
+            while (currentAttempt <= MAX_ATTEMPT_SIZE) {
+                handleAskingQuestion(typeOfQuestion);
 
-            System.out.println(
-                    switch (typeOfQuestion) { // Ensure random number is between 0 and 2
-                        case QUESTION_TYPE_RANDOM_FACT -> handleFactQuestion(randomFact);
-                        case QUESTION_TYPE_WHICH_CAPITAL -> questions[currentQuestion].getCapitalCityName() + " is the capital of which country?";
-                        case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of " + questions[currentQuestion].getName() + "?";
-                        default -> "No function called";
+                if (checkIfQuestionIsCorrect(typeOfQuestion)) {
+                    System.out.println("Correct!");
+
+                    // Update the attempts map based on the attempt number
+                    if (currentAttempt == 0) {
+                        attempts.put(CORRECT_ON_FIRST_ATTEMPT, attempts.get(CORRECT_ON_FIRST_ATTEMPT) + 1);
+                    } else if (currentAttempt == 1) {
+                        attempts.put(CORRECT_ON_SECOND_ATTEMPT, attempts.get(CORRECT_ON_SECOND_ATTEMPT) + 1);
                     }
-                            + "\t" + questions[currentQuestion].getName() + ", " + questions[currentQuestion].getCapitalCityName()
-            );
 
-            answer = scan.nextLine();
-
-            switch (typeOfQuestion) { // Ensure random number is between 0 and 2
-                case QUESTION_TYPE_RANDOM_FACT -> isCorrect = handleAnswer(currentQuestion, answer, typeOfQuestion);
-                case QUESTION_TYPE_WHICH_CAPITAL -> isCorrect = handleAnswer(currentQuestion, answer, typeOfQuestion);
-                case QUESTION_TYPE_WHICH_COUNTRY -> isCorrect = handleAnswer(currentQuestion, answer, typeOfQuestion);
-                default -> throw new IllegalStateException("Unexpected value: " + typeOfQuestion);
-            }
-
-            if(isCorrect || currentTry >= MAX_TRIES) {
-                attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
-                printScore(); // DEBUG
-
-                typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
-                currentQuestion++;
-                randomFact = questions[currentQuestion].getRandomFact();
-
-                if (currentTry >= MAX_TRIES)
-                {
-                    attempts.replace(currentTry, attempts.get(currentTry) + INCREMENT_AMOUNT);
-                    System.out.println("Ran out of tries, next question.");
+                    currentQuestionIndex++;
+                    currentAttempt = START_INDEX;  // Reset for the next question
+                    printScore();  // Print updated score
+                    break;  // Exit the current attempt loop to go to next question
+                } else {
+                    System.out.println("Try Again.");
+                    currentAttempt++;
                 }
 
-                currentAttempt++;
-                currentTry = START_INDEX;
-            } else {
-                System.out.println("Try again!");
+                if (currentAttempt == INCORRECT_AFTER_TWO_ATTEMPTS) {
+                    System.out.println("Ran out of tries, next question.");
+                    // If the user has failed 2 attempts, mark it as incorrect and move to the next question
+                    attempts.put(INCORRECT_AFTER_TWO_ATTEMPTS, attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS) + 1);
+                    currentAttempt = START_INDEX;
+                    currentQuestionIndex++;
+                    printScore();  // Print updated score
+                    break;  // Exit the current attempt loop to go to next question
+                }
             }
         }
+    }
 
+
+
+    /*
+     * Checks if the answer is correct.
+     * @param typeOfQuestion
+     * @return a boolean depending on the correctness of the answer.
+     */
+    private boolean checkIfQuestionIsCorrect(final int typeOfQuestion)
+    {
+        final String name;
+        final String capital;
+        final String userResponse;
+
+        userResponse = scanner.nextLine();
+
+        name = questions[currentQuestionIndex].getName();
+        capital = questions[currentQuestionIndex].getCapitalCityName();
+
+        if ((typeOfQuestion == QUESTION_TYPE_RANDOM_FACT ||
+                typeOfQuestion == QUESTION_TYPE_WHICH_CAPITAL) &&
+                userResponse.equalsIgnoreCase(name)
+        )
+        {
+            return true;
+        }
+
+        if (typeOfQuestion == QUESTION_TYPE_WHICH_COUNTRY &&
+                userResponse.equalsIgnoreCase(capital)
+        )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /*
+     * Asks the user the question.
+     * @param currentQuestion as the current question in the array to ask.
+     * @return the question as a String.
+     */
+    private void handleAskingQuestion(final int typeOfQuestion)
+    {
+        final String randomFact;
+        final String questionText;
+        randomFact = questions[currentQuestionIndex].getRandomFact();
+
+        questionText = switch (typeOfQuestion) {
+            case QUESTION_TYPE_RANDOM_FACT -> handleFactQuestion(randomFact);
+            case QUESTION_TYPE_WHICH_CAPITAL -> questions[currentQuestionIndex].getCapitalCityName() + " is the capital of which country?";
+            case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of " + questions[currentQuestionIndex].getName() + "?";
+            default -> "No function called";
+        };
+
+        System.out.println(questionText + "\t" + questions[currentQuestionIndex].getName() + ", " + questions[currentQuestionIndex].getCapitalCityName());
     }
 
     /*
@@ -318,40 +353,6 @@ public class WordGame
                 .toLowerCase()
                 + randomFact
                 .substring(END_INDEX_RANDOM_FACT_FIRST_LETTER);
-    }
-
-    /*
-     * Checks if the answer is correct.
-     * @param currentQuestion
-     * @param answer
-     * @param typeOfQuestion
-     * @return a boolean depending on the correctness of the answer.
-     */
-    private boolean handleAnswer(final int currentQuestion, final String answer, final int typeOfQuestion)
-    {
-        final String name;
-        final String capital;
-
-        name = questions[currentQuestion].getName();
-        capital = questions[currentQuestion].getCapitalCityName();
-
-        if ((typeOfQuestion == QUESTION_TYPE_RANDOM_FACT ||
-            typeOfQuestion == QUESTION_TYPE_WHICH_CAPITAL) &&
-            answer.equalsIgnoreCase(name)
-        )
-        {
-            System.out.println("Correct!");
-            return true;
-        }
-
-        if (typeOfQuestion == QUESTION_TYPE_WHICH_COUNTRY &&
-            answer.equalsIgnoreCase(capital)
-        )
-        {
-            System.out.println("Correct!");
-            return true;
-        }
-        return false;
     }
 
     /**

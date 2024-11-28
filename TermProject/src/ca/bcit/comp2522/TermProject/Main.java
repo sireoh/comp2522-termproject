@@ -11,32 +11,28 @@ import java.util.Scanner;
  */
 public class Main
 {
-    private final static Scanner scanner;
-
-    static {
-        scanner = new Scanner(System.in);
-    }
-
     public static void main(String[] args)
     {
         final Scanner scan;
         final NumberGame ng;
         boolean isStillPlaying;
+        String option;
 
         isStillPlaying = true;
         WordGame wg;
         MinecraftRogueLike mcrl;
-        scan = new Scanner(System.in);
 
        do
        {
            System.out.println("Please choose an option:");
            System.out.println("Press W to play the Word game.");
            System.out.println("Press N to play the Number game.");
-           System.out.println("Press M to play the Minecraft game.");
+           System.out.println("Press M to play the MinecraftRogueLike game.");
            System.out.println("Press Q to quit.");
 
-           switch(makeChoice())
+           option = makeChoice();
+
+           switch(option)
            {
                case "w" -> {
                    System.out.println("Starting the word game.");
@@ -57,8 +53,6 @@ public class Main
                default -> System.out.println("please enter a valid character.");
            }
        } while (isStillPlaying);
-
-        scan.close();
     }
 
     /*
@@ -70,11 +64,14 @@ public class Main
         while(true)
         {
             final String option;
-            option = scanner.nextLine().trim();
-            if((option.equalsIgnoreCase("W") ||
-                 option.equalsIgnoreCase("N") ||
-                 option.equalsIgnoreCase("M") ||
-                 option.equalsIgnoreCase("Q")))
+            final Scanner scan;
+            scan = new Scanner(System.in);
+
+            option = scan.nextLine().trim();
+            if(option.equalsIgnoreCase("w") ||
+                option.equalsIgnoreCase("n") ||
+                option.equalsIgnoreCase("m") ||
+                option.equalsIgnoreCase("q"))
             {
                 return option;
             } else

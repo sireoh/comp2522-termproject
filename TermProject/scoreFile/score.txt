@@ -1,0 +1,28 @@
+Date and Time: 2024-11-27 18:47:37
+Games Played: 1
+Correct First Attempts: 10
+Correct Second Attempts: 0
+Incorrect Attempts: 0
+Score: 20 points
+
+Date and Time: 2024-11-27 18:56:11
+Games Played: 1
+Correct First Attempts: 10
+Correct Second Attempts: 0
+Incorrect Attempts: 0
+Score: 20 points
+
+Date and Time: 2024-11-27 19:03:46
+Games Played: 1
+Correct First Attempts: 9
+Correct Second Attempts: 2
+Incorrect Attempts: 0
+Score: 20 points
+
+Date and Time: 2024-11-27 19:16:05
+Games Played: 1
+Correct First Attempts: 0
+Correct Second Attempts: 20
+Incorrect Attempts: 0
+Score: 20 points
+
