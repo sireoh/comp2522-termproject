@@ -1,6 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -35,8 +36,7 @@ public class NumberGame extends Application
      * @param stage as a Stage.
      */
     @Override
-    public void start(final Stage stage) throws IOException
-    {
+    public void start(final Stage stage) throws IOException {
         stage.setTitle("Number Game");
 
         final VBox layout;
@@ -49,7 +49,16 @@ public class NumberGame extends Application
         board.handleStyling(scene);
 
         stage.setScene(scene);
+
+        // Show the stage and request focus explicitly
         stage.show();
+        stage.toFront();    // Bring the window to the foreground
+        stage.requestFocus(); // Request focus
+
+        // Display the start alert
         board.showStartAlert();
     }
+
+
+
 }

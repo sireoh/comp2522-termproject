@@ -1,6 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 
 import ca.bcit.comp2522.TermProject.MinecraftRogueLike.MinecraftRogueLike;
+import javafx.application.Application;
 
 import java.util.Scanner;
 
@@ -11,13 +12,20 @@ import java.util.Scanner;
  */
 public class Main
 {
+    final static Scanner scan;
+
+    static {
+        scan = new Scanner(System.in);
+    }
+
     public static void main(String[] args)
     {
-        final Scanner scan;
         final NumberGame ng;
         boolean isStillPlaying;
         String option;
+        boolean isJavaFXStarted;
 
+        isJavaFXStarted = false;
         isStillPlaying = true;
         WordGame wg;
         MinecraftRogueLike mcrl;
@@ -40,7 +48,12 @@ public class Main
                }
                case "n" -> {
                    System.out.println("Starting the number game.");
-                   NumberGame.main(new String[]{});
+                   if (!isJavaFXStarted) {
+                       new Thread(() -> Application.launch(NumberGame.class)).start();
+                       isJavaFXStarted = true;
+                   } else {
+                       JavaFXManager.startNumberGame();
+                   }
                }
                case "m" -> {
                    System.out.println("Starting the minecraft game.");
@@ -55,28 +68,26 @@ public class Main
        } while (isStillPlaying);
     }
 
-    /*
-     * Helper function that create the choice menu
-     * @return the String representing the users decision
+    /**
+     * Helper function that creates the choice menu.
+     *
+     * @return the String representing the user's decision
      */
-    private static String makeChoice()
-    {
-        while(true)
-        {
-            final String option;
-            final Scanner scan;
-            scan = new Scanner(System.in);
+    private static String makeChoice() {
+        String option;
+
+        while (true) {
+            System.out.print("Enter your choice (W/N/M/Q): ");
 
             option = scan.nextLine().trim();
-            if(option.equalsIgnoreCase("w") ||
-                option.equalsIgnoreCase("n") ||
-                option.equalsIgnoreCase("m") ||
-                option.equalsIgnoreCase("q"))
-            {
-                return option;
-            } else
-            {
-                System.out.println("Chosen option must be either W, N, M or Q.");
+
+            if (option.equalsIgnoreCase("w") ||
+                    option.equalsIgnoreCase("n") ||
+                    option.equalsIgnoreCase("m") ||
+                    option.equalsIgnoreCase("q")) {
+                return option.toLowerCase();
+            } else {
+                System.out.println("Invalid input. Please choose either W, N, M, or Q.");
             }
         }
     }
