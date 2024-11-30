@@ -33,18 +33,16 @@ public class Board
     private final static int MIN_BUTTON_VALUE = 1;
     private final static int MAX_BUTTON_VALUE = 1000;
     private final static int MAX_BOARD_SIZE = 20;
-    private final static int ERROR_CHECKING_SCORE_STARTING_INDEX = 1;
-    private final static int PREVIOUS_CELL = 1;
     private final static int EMPTY_CELL = 0;
-    private final static int NO_ERRORS = 0;
     private final Random random;
     private int currentNumber;
     private final int[] board;
-    private Alert lossAlert;
-    private Alert startAlert;
+    private final Alert lossAlert;
+    private final Alert startAlert;
     private Label label;
     private List<Button> buttons;
     private Stage stage;
+    private final static int UNFILLED_CELL_VALUE = -1;
 
     public Board()
     {
@@ -52,6 +50,7 @@ public class Board
 
         random = new Random();
         stage = new Stage();
+        lossAlert = new Alert(Alert.AlertType.CONFIRMATION);
         startAlert = new Alert(Alert.AlertType.INFORMATION);
         playButton = ((Button) startAlert.getDialogPane().lookupButton(ButtonType.OK));;
         startAlert.setTitle("Welcome");
@@ -95,14 +94,7 @@ public class Board
                 b.setOnAction(click -> {
                     final Button temp;
                     temp = (Button) click.getSource();
-
                     handleInsertion(temp, tempInt);
-
-                    if (countItems() < MAX_BOARD_SIZE) {
-                        label.setText(formatNextNumberText(currentNumber));
-                    } else {
-                        calculateScore();
-                    }
                 });
 
                 index++;
@@ -118,6 +110,10 @@ public class Board
         return vbox;
     }
 
+    /**
+     * Sets the stage
+     * @param stage as the stage to set.
+     */
     public void setStage(final Stage stage)
     {
         this.stage = stage;
@@ -126,40 +122,64 @@ public class Board
     /*
      * Calculates the final score
      */
-    private void calculateScore()
-    {
-        int errors;
-        errors = STARTING_INDEX;
+    public void disableUnusableButtons() {
+        int prevNumberBound;
+        int nextNumberBound;
 
-        for (int i = ERROR_CHECKING_SCORE_STARTING_INDEX; i < MAX_BOARD_SIZE; i++) {
-            if (board[i] < board[i - PREVIOUS_CELL]) {
-                errors++;
+        prevNumberBound = UNFILLED_CELL_VALUE;
+        nextNumberBound = UNFILLED_CELL_VALUE;
+
+        System.out.println("Current Number: " + currentNumber);
+
+        for (int i = STARTING_INDEX; i < MAX_ROW_COUNT; i++) {
+            if (board[i] != STARTING_INDEX) {
+                if (board[i] < currentNumber) {
+                    prevNumberBound = i;
+                }
+                if (board[i] > currentNumber) {
+                    nextNumberBound = i;
+                }
             }
         }
 
-        if (errors > NO_ERRORS) {
-            final Button tryAgainButton;
-            final Button quitButton;
-            lossAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            tryAgainButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.OK));
-            quitButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.CANCEL));
-
-            tryAgainButton.setText("Try Again");
-            quitButton.setText("Quit");
-
-            tryAgainButton.setOnAction(event -> {
-                handleNewGame();
-            });
-
-            quitButton.setOnAction(event -> {
-                stage.close();
-            });
-
-            label.setText("Click 'Try Again' to start a new game.");
-            lossAlert.setTitle("Game Over");
-            lossAlert.setHeaderText("Game Over! Impossible to place the next number: " + currentNumber + ". Try again?");
-            lossAlert.show();
+        if (prevNumberBound != UNFILLED_CELL_VALUE) {
+            System.out.println("Previous Number: " + board[prevNumberBound]);
+        } else {
+            System.out.println("No valid previous number found.");
         }
+
+        if (nextNumberBound != UNFILLED_CELL_VALUE) {
+            System.out.println("Next Number: " + board[nextNumberBound]);
+        } else {
+            System.out.println("No valid next number found.");
+        }
+    }
+
+    /*
+     * Function prints the Loss Message.
+     */
+    private void printLossMessage()
+    {
+        final Button tryAgainButton;
+        final Button quitButton;
+        tryAgainButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.OK));
+        quitButton = ((Button) lossAlert.getDialogPane().lookupButton(ButtonType.CANCEL));
+
+        tryAgainButton.setText("Try Again");
+        quitButton.setText("Quit");
+
+        tryAgainButton.setOnAction(event -> {
+            handleNewGame();
+        });
+
+        quitButton.setOnAction(event -> {
+            stage.close();
+        });
+
+        label.setText("Click 'Try Again' to start a new game.");
+        lossAlert.setTitle("Game Over");
+        lossAlert.setHeaderText("Game Over! Impossible to place the next number: " + currentNumber + ". Try again?");
+        lossAlert.show();
     }
 
     /*
@@ -177,25 +197,6 @@ public class Board
 
         currentNumber = random.nextInt(MAX_BUTTON_VALUE);
         label.setText(formatNextNumberText(currentNumber));
-    }
-
-    /*
-     * Counts the number of filled items in the array.
-     * @return the number of filled items as an int.
-     */
-    private int countItems()
-    {
-        int count = STARTING_INDEX;
-
-        for (final int number : board)
-        {
-            if (number != EMPTY_CELL)
-            {
-                count++;
-            }
-        }
-
-        return count;
     }
 
     /**
@@ -248,8 +249,10 @@ public class Board
 
             // Randomize the global int for the next function.
             currentNumber = random.nextInt(MIN_BUTTON_VALUE, MAX_BUTTON_VALUE);
+            disableUnusableButtons();
         } else {
             System.out.println("Box has already been filled.");
         }
+        label.setText(formatNextNumberText(currentNumber));
     }
 }

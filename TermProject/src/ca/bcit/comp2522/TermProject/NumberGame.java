@@ -17,10 +17,10 @@ public class NumberGame extends Application
 {
     private final static int WIDTH = 800;
     private final static int HEIGHT = 600;
-    private final Board board;
+    private NewBoard board;
 
     {
-        board = new Board();
+        board = new NewBoard();
     }
 
     /**
@@ -39,26 +39,13 @@ public class NumberGame extends Application
     public void start(final Stage stage) throws IOException {
         stage.setTitle("Number Game");
 
-        final VBox layout;
-        final Scene scene;
-        layout = board.generateLayout();
+        board = new NewBoard();
 
-        scene = new Scene(layout, WIDTH, HEIGHT);
+        VBox root = new VBox(10);
+        root.getChildren().addAll(board.getUI());
 
-        board.setStage(stage);
-        board.handleStyling(scene);
-
+        Scene scene = new Scene(root, 400, 500);
         stage.setScene(scene);
-
-        // Show the stage and request focus explicitly
         stage.show();
-        stage.toFront();    // Bring the window to the foreground
-        stage.requestFocus(); // Request focus
-
-        // Display the start alert
-        board.showStartAlert();
     }
-
-
-
 }
