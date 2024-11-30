@@ -12,6 +12,7 @@ public class MinecraftRogueLike
     private final List<Card> deck;
     private final List<Card> hand;
     private final static Scanner scanner;
+    private final static int STARTING_ROUND = 1;
 
     static {
         scanner = new Scanner(System.in);
@@ -22,7 +23,6 @@ public class MinecraftRogueLike
      */
     public MinecraftRogueLike()
     {
-
         deck = CardFactory.generateDeck();
         hand = GameHandler.generateHand(deck);
     }
@@ -69,7 +69,7 @@ public class MinecraftRogueLike
         MinecraftRogueLike game = new MinecraftRogueLike();
         List<Card> hand = game.getHand();
         List<Card> deck = game.getDeck();
-        int round = 1;
+        int round = STARTING_ROUND;
 
         while (!deck.isEmpty()) {
             System.out.println("Round " + round);
