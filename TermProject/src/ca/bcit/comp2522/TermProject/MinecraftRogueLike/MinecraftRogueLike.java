@@ -1,6 +1,10 @@
 package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * MyGame represents Minecraft Roguelike.
@@ -9,8 +13,8 @@ import java.util.Scanner;
  */
 public class MinecraftRogueLike
 {
-    private final List<Card> deck;
-    private final List<Card> hand;
+    private List<Card> deck;
+    private List<Card> hand;
     private final static Scanner scanner;
     private final static int STARTING_ROUND = 1;
 
@@ -21,10 +25,20 @@ public class MinecraftRogueLike
     /**
      * Initialises the deck and hand.
      */
-    public MinecraftRogueLike()
-    {
-        deck = CardFactory.generateDeck();
-        hand = GameHandler.generateHand(deck);
+    public MinecraftRogueLike() {
+        final ExecutorService executorService;
+        executorService = Executors.newSingleThreadExecutor();
+        Future<List<Card>> futureDeck;
+        futureDeck = executorService.submit(CardFactory::getDeck);
+
+        try {
+            deck = futureDeck.get();
+            hand = GameHandler.generateHand(deck);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+        }
     }
 
     /**
