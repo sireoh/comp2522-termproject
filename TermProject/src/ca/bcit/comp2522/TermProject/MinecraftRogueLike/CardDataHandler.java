@@ -63,7 +63,7 @@ public abstract class CardDataHandler implements CardFormatter
                 requiredCards.add("WaterBucket");
                 requiredCards.add("FlintAndSteel");
             }
-            case "Blaze" -> requiredCards.add("EnderPearl");
+            case "Blaze" -> requiredCards.add("EnderPearls");
         }
     }
 

@@ -11,6 +11,8 @@ public class GameHandler {
     private final static Card card;
     private final static int STARTING_INDEX = 0;
     private final static int OFFSET = 1;
+    private final static int CHOICE_YES = 1;
+    private final static int CHOICE_NO = 2;
 
     static {
         card = new EventCard("");
@@ -125,11 +127,61 @@ public class GameHandler {
         return chosenCard;
     }
 
+    /**
+     * Plays an event card if the required cards are present in the user's hand.
+     * @param eventCard the event card to play
+     * @param hand the player's current hand
+     */
+    public static void playEventCard(final Card eventCard, final List<Card> hand, final List<Card> deck) {
+        final List<String> requiredCards;
+        final List<String> handCardNames;
+        final List<String> missingCards;
+
+        requiredCards = ((EventCard) eventCard).getRequiredCards();
+        handCardNames = hand.stream()
+                .map(Card::getName)
+                .toList();
+
+        missingCards = new ArrayList<>();
+
+        // Check for missing required cards
+        for (String required : requiredCards) {
+            if (!handCardNames.contains(required)) {
+                missingCards.add(required);
+            }
+        }
+
+        if (missingCards.isEmpty()) {
+            System.out.println("Successfully played: " + eventCard.getName());
+
+            if (eventCard.getName().equals("EnderDragon")) {
+                BossFightEventHandler.beginBossFight();
+            }
+
+            // Removes the previous card from the hand and deck
+            removeCardByName(hand, eventCard.getName());
+            removeCardByName(deck, eventCard.getName());
+
+            // Remove the required cards the eventCard uses
+            for (final String cardName : ((EventCard) eventCard).getRequiredCards())
+            {
+                // Removes the previous card from the hand and deck
+                removeCardByName(hand, cardName);
+                removeCardByName(deck, cardName);
+            }
+        } else {
+            System.out.println("Missing required cards:");
+            for (String missing : missingCards) {
+                System.out.println("- " + missing);
+            }
+        }
+    }
+
     /*
      * Generates a menu that shows what's available in the list.
      * @param cardsToChooseFrom as the list of cards to choose from.
      */
-    private static void generateOptionsList(final List<Card> cardsToChooseFrom) {
+    public static void generateOptionsList(final List<Card> cardsToChooseFrom) {
         Card cardOption;
 
         // Iterate through the list of cards and print the options in the desired format
@@ -139,6 +191,24 @@ public class GameHandler {
             System.out.printf(card.formatCard("To choose, enter: %d") + "\n", (i + 1));
             System.out.println(cardOption);
         }
+    }
+
+    /**
+     * Helper function checks if a card exists in the users hand.
+     * @param hand as the list to check
+     * @param cardToSeachFor as the cardName to search for.
+     * @return true if card exists.
+     */
+    public static boolean checkForCardInHand(final List<Card> hand, final String cardToSeachFor)
+    {
+        for (final Card card : hand)
+        {
+            if (card.getName().equals(cardToSeachFor))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /*
@@ -165,7 +235,8 @@ public class GameHandler {
         {
             try
             {
-                int choice = Integer.parseInt(scanner.nextLine().trim());
+                final int choice;
+                choice = Integer.parseInt(scanner.nextLine().trim());
                 if(choice > lowerBound && choice <= upperBound)
                 {
                     return choice;
@@ -174,6 +245,36 @@ public class GameHandler {
                     System.out.println("Invalid choice, please choose again.");
                 }
             } catch(NumberFormatException e)
+            {
+                System.out.println("Please enter a valid number.");
+            }
+        }
+    }
+
+    /*
+     * Helper function that loops and helps with choices
+     * specifically Yes and No ones
+     * @return the choice, once valid.
+     */
+    public static int makeChoiceYesNo()
+    {
+        while(true)
+        {
+            try
+            {
+                System.out.println("Decide Your Fate:");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                final int choice;
+                choice = Integer.parseInt(scanner.nextLine().trim());
+                if(choice == CHOICE_NO || choice == CHOICE_YES)
+                {
+                    return choice;
+                } else
+                {
+                    System.out.println("Invalid choice, please choose again.");
+                }
+            } catch(final NumberFormatException e)
             {
                 System.out.println("Please enter a valid number.");
             }

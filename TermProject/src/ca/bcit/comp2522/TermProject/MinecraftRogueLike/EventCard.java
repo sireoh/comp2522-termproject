@@ -25,6 +25,15 @@ public class EventCard extends Card {
     }
 
     /**
+     * Getter function for the required cards.
+     * @return the required cards for the event.
+     */
+    public List<String> getRequiredCards()
+    {
+        return requiredCards;
+    }
+
+    /**
      * Prints the details of the event card to the console.
      */
     @Override
