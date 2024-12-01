@@ -1,27 +1,63 @@
-lesson 1: initializers in class GameHandler
-overloading in class DeckEmptyException
+Week 1:
+    Validation - Card class::validateName method, 
+    Method Overloading - GameHandler class::makeChoice method,
+    Constructor Chaining - Not used.
+    Stringbuilder - ActivatableCard or EventCard or TokenCard or WeaponCard class::toString method,
+    Regex - CardFactory class::generateDeck method,
 
-lesson 2: inheritance in class Card and TokenCard
-exceptions in class DeckEmptyException and InvalidCardTypeException
+Week 2:
+    Inheritance - ActivatableCard or EventCard or TokenCard or WeaponCard class inherits Card class
+    Polymorphism - GameHandler class:::drawCard method, if an instanceof EventCard.
+    Exception Handling - DeckEmptyException exception and InvalidCardTypeException exception.
+    
+Week 3:
+    Final Method - MinecraftRogueLike class::printDeckDetails method,
+    Abstract Class - abstract Card class is the parent of ActivatableCard, EventCard, TokenCard and WeaponCard class.
+    
+Week 4:
+    Interfaces - CardFormatter class::formatCard implemented by Card class
+    
+Week 5:
+    Arrays - CardFactory class::generateDeck method, when I call the split method.
+    Collections(List, Map, Set) - MinecraftRogueLike class for List<Card> deck and hand.
+    Enhanced For Loop - ActivatableCard class::getObtainedCards method,
+    Generics Collections - Not used.
+    Iterators - Not used.
 
-lesson 3: overriding in class TokenCard
-substitution in class GameHandler
+Week 6:
+    Generics Methods - MinecraftRogueLike<T extends Card>
+    Nested Classes - JavaFXManager because it uses the Singleton design pattern.
+    
+Week 7:
+    Functional Interfaces
+    Lambdas
+    Method References
 
-lesson 4: abstract methods in class NULL
-abstract classes in class E
+Week 8:
+    Paths
+    Files
+    Scanner
+    Streaming
+    Random
 
-lesson 5: collections in class GameHandler
-iterator in class G
+Week 9:
+    JavaFX - Not used.
+    Threading - In JavaFXManager
+    
+Week 10:
+    Unit Testing - MinecraftRogueLikeTest
 
-lesson 6: lambda expressions in class B
-method references in class GameHandler
-nested classes in class F
+Week 11:
+    Singleton - JavaFXManager class.
+    Factory
+    Abstract Factory - CardFactory class
+    Command - Plan to use in the future with CardAction class,
+    Decorator
+    Observer
 
-lesson 8: scanner in class MyGame
-file in class A
-
-lesson 9: streams and filters in class GameHandler
-
-lesson 10: unit tests in class BTest
-lesson 11: design pattern in class CardFactory
-lesson 12: concurrency in class X
+Week 12:
+    Thread
+    Timer/TimerTask
+    Executor
+    Future Task
+    Parallel Task

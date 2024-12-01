@@ -42,13 +42,14 @@ public class ActivatableCard extends Card {
             case "GoldIngots" -> obtainedCards.add("EnderPearls");
         }
     }
+
     /*
      * Helper function that gives the requirements as a String
      * @return the requirements as a string
      */
     private String getObtainedCards()
     {
-        StringBuilder output;
+        final StringBuilder output;
         output = new StringBuilder();
 
         for (final String requiredCard : obtainedCards)

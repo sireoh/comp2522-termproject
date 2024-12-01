@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 public class GameHandler {
     private final static Scanner scanner;
     private final static Card card;
+    private final static int STARTING_INDEX = 0;
+    private final static int OFFSET = 1;
 
     static {
         card = new EventCard("");
@@ -83,7 +85,7 @@ public class GameHandler {
         chosenCardFromDeck = promptCardToSwap(filteredDeck);
 
         if (chosenCardFromHand == null ||
-            chosenCardFromDeck == null)
+                chosenCardFromDeck == null)
         {
             System.out.println("There are no items of that type for you to choose from.");
             return;
@@ -114,8 +116,8 @@ public class GameHandler {
         System.out.println("Which card would you like to swap?");
         generateOptionsList(cardsToChooseFrom);
 
-        choice = makeChoice(0, cardsToChooseFrom.size());
-        chosenCard = cardsToChooseFrom.get(choice-1);
+        choice = makeChoice(STARTING_INDEX, cardsToChooseFrom.size());
+        chosenCard = cardsToChooseFrom.get(choice - OFFSET);
 
         System.out.println("You chose: " + choice);
         System.out.println(chosenCard);

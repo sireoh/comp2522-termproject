@@ -45,7 +45,7 @@ public class Main
                }
                case "n" -> {
                    System.out.println("Starting the number game.");
-                   JavaFXManager.startNumberGame();
+                   JavaFXManager.getInstance().startNumberGame();
                }
                case "m" -> {
                    System.out.println("Starting the minecraft game.");

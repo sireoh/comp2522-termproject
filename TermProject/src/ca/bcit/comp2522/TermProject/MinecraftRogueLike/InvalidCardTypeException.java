@@ -17,7 +17,6 @@ public class InvalidCardTypeException extends Exception {
 
     /**
      * Constructs an {@code InvalidCardTypeException} with a custom message.
-     *
      * @param message the detail message for the exception
      */
     public InvalidCardTypeException(String message) {
