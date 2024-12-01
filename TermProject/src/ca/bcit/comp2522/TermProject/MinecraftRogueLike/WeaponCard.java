@@ -7,12 +7,9 @@ package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
  */
 public class WeaponCard extends Card {
     private final int attackAccuracy;
-    private final String cardDescription;
     private final static int MIN_ACCURACY = 30;
     private final static int MAX_ACCURACY = 100;
     private final static int EMPTY_ACCURACY = 0;
-    private final static String CARD_BORDER_LINE = "+----------------------------------+\n";
-    private final static String EMPTY_STRING = "";
 
     /**
      * Constructs a {@code WeaponCard} with the specified name.
@@ -20,24 +17,9 @@ public class WeaponCard extends Card {
      */
     public WeaponCard(final String name) {
         super(name);
-        attackAccuracy = handleAccuracy(name);
-        cardDescription = handleDescription(name);
-    }
+        super.setCardDescription(handleDescription(name, this.getClass()));
 
-    /*
-     * Handles the attack accuracy depending on what card it is.
-     * @param name as the name of the card to set
-     * @return the String the card should have
-     */
-    private String handleDescription(final String name)
-    {
-        return switch(name)
-        {
-            case "EnchantedNetheriteSword" -> "OHKO's the dragon";
-            case "StoneSword" -> "Generic RPG item";
-            case "Bow" -> "64 Arrows";
-            default -> EMPTY_STRING;
-        };
+        attackAccuracy = handleAccuracy(name);
     }
 
     /*
@@ -53,15 +35,6 @@ public class WeaponCard extends Card {
             case "Bow" -> MAX_ACCURACY;
             default -> EMPTY_ACCURACY;
         };
-    }
-
-    /**
-     * Gets the attack accuracy
-     * @return the attack accuracy as an int
-     */
-    public int getAttackAccuracy()
-    {
-        return attackAccuracy;
     }
 
     /**
@@ -88,8 +61,10 @@ public class WeaponCard extends Card {
 
         if (attackAccuracy != EMPTY_ACCURACY) {
             sb.append(formatCard(attackAccuracy + "% ATK ACC")).append("\n");
-        } else {
-            sb.append(formatCard(cardDescription)).append("\n");
+        }
+
+        if (super.getCardDescription() != null) {
+            sb.append(formatCard(super.getCardDescription())).append("\n");
         }
 
         sb.append(CARD_BORDER_LINE);

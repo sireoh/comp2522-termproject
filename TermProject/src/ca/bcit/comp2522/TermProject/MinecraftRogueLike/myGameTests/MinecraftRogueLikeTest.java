@@ -15,8 +15,6 @@ class MinecraftRogueLikeTest {
 
     @BeforeEach
     void setUp() {
-        System.out.println("Setting it up.");
-
         // Initialize a mutable test deck
         testDeck = new ArrayList<>(List.of(
                 new TokenCard("TestToken1"),
@@ -83,7 +81,6 @@ class MinecraftRogueLikeTest {
 
     @AfterEach
     void tearDown() {
-        System.out.println("Tearing it down.");
         testDeck.clear();
         testHand.clear();
     }

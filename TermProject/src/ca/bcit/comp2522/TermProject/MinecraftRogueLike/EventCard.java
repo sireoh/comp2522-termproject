@@ -11,7 +11,6 @@ import java.util.List;
 public class EventCard extends Card {
     private final String cardDescription;
     private final List<String> requiredCards;
-    private final static String CARD_BORDER_LINE = "+----------------------------------+\n";
 
     /**
      * Constructs an {@code EventCard} with the specified name.
@@ -21,58 +20,8 @@ public class EventCard extends Card {
         super(name);
 
         requiredCards = new ArrayList<>();
-        cardDescription = handleDescription(name);
-        handleRequiredCards(name);
-    }
-
-    /*
-     * Handles the description of the cards.
-     * @param name as the name of the card to set
-     * @return the int the card should have
-     */
-    private void handleRequiredCards(final String name)
-    {
-        switch(name)
-        {
-            case "LavaPool" -> {
-                requiredCards.add("WaterBucket");
-                requiredCards.add("FlintAndSteel");
-            }
-            case "Blaze" -> requiredCards.add("EnderPearl");
-        }
-    }
-
-    /*
-     * Helper function that gives the requirements as a String
-     * @return the requirements as a string
-     */
-    private String getRequiredCards()
-    {
-        StringBuilder output;
-        output = new StringBuilder();
-
-        for (final String requiredCard : requiredCards)
-        {
-            output.append(formatCard("- " + requiredCard)).append("\n");
-        }
-
-        return output.toString();
-    }
-
-    /*
-     * Handles the attack accuracy depending on what card it is.
-     * @param name as the name of the card to set
-     * @return the String the card should have
-     */
-    private String handleDescription(final String name)
-    {
-        return switch(name)
-        {
-            case "EnderDragon" -> "Beats the game.";
-            case "LavaPool" -> "Starts the Blaze Event.";
-            case "Blaze" -> "Plays the EnderDragon Event.";
-            default -> "Error.";
-        };
+        cardDescription = handleDescription(name, this.getClass());
+        handleRequiredCards(name, requiredCards);
     }
 
     /**
@@ -100,7 +49,7 @@ public class EventCard extends Card {
 
         if (!requiredCards.isEmpty()) {
             sb.append(formatCard("Required:")).append("\n");
-            sb.append(getRequiredCards());
+            sb.append(formatRequiredCards(requiredCards));
         }
 
         sb.append(CARD_BORDER_LINE);

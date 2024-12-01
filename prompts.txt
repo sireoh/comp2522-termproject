@@ -25,7 +25,7 @@ Week 5: Arrays, Collections, and Iterators
     Iterators - Not used.
 
 Week 6: Generics and Nested Class.
-    Generics Methods - GameHandler final Class<? extends Card> type.
+    Generics Methods - Not used.
     Nested Classes - JavaFXManager because it uses the Singleton design pattern.
     
 Week 7: Functional Interfaces, Lambdas and Method References.
