@@ -1,7 +1,5 @@
 package ca.bcit.comp2522.TermProject;
-
 import ca.bcit.comp2522.TermProject.MinecraftRogueLike.MinecraftRogueLike;
-import javafx.application.Application;
 
 import java.util.Scanner;
 
@@ -48,12 +46,7 @@ public class Main
                }
                case "n" -> {
                    System.out.println("Starting the number game.");
-                   if (!isJavaFXStarted) {
-                       new Thread(() -> Application.launch(NumberGame.class)).start();
-                       isJavaFXStarted = true;
-                   } else {
-                       JavaFXManager.startNumberGame();
-                   }
+                   JavaFXManager.startNumberGame();
                }
                case "m" -> {
                    System.out.println("Starting the minecraft game.");

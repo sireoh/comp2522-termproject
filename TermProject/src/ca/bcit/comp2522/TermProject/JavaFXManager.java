@@ -4,23 +4,36 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 
 /**
- * Java FX Manager, manages the running of Number Game
- * @author Vincent Fung
- * @version 2024
+ * Java FX Manager, manages the running of Number Game.
  */
 public class JavaFXManager {
+    private static NumberGame numberGameInstance;
+    private static boolean isJavaFXInitialized = false;
 
-    /**
-     * Static helper function that starts number game.
-     */
     public static void startNumberGame() {
-        Platform.runLater(() -> {
-            try {
+        if (!isJavaFXInitialized) {
+            new Thread(() -> {
+                try {
+                    Platform.startup(() -> {
+                        isJavaFXInitialized = true;
+                        startGameInstance();
+                    });
+                } catch (IllegalStateException e) {
+                    isJavaFXInitialized = true;
+                    startGameInstance();
+                }
+            }).start();
+        } else {
+            Platform.runLater(JavaFXManager::startGameInstance);
+        }
+    }
 
-                new NumberGame().start(new Stage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    private static void startGameInstance() {
+        if (numberGameInstance == null) {
+            numberGameInstance = new NumberGame();
+            numberGameInstance.start(new Stage());
+        } else {
+            numberGameInstance.resetGame();
+        }
     }
 }

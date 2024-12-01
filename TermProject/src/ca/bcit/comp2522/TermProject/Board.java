@@ -41,7 +41,26 @@ public class Board {
     private int totalGameOver;
     private int totalGamesPlayed;
 
+    private final Alert finishAlert;
+    private final Button tryAgainButton;
+    private final Button quitButton;
+
     public Board() {
+        finishAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        tryAgainButton = ((Button) finishAlert.getDialogPane().lookupButton(ButtonType.OK));
+        quitButton = ((Button) finishAlert.getDialogPane().lookupButton(ButtonType.CANCEL));
+
+        tryAgainButton.setText("Try Again");
+        quitButton.setText("Quit");
+
+        tryAgainButton.setOnAction(event -> {
+            handleNewGame();
+        });
+
+        quitButton.setOnAction(event -> {
+            stage.close();
+        });
+
         random = new Random();
         buttons = new Button[MAX_BOARD_SIZE];
         board = new int[MAX_BOARD_SIZE];
@@ -107,15 +126,20 @@ public class Board {
      * Shows the welcome alert.
      */
     public void showStartAlert() {
-        Alert startAlert = new Alert(Alert.AlertType.INFORMATION);
+        final Alert startAlert;
+        final Button playButton;
+
+        startAlert = new Alert(Alert.AlertType.INFORMATION);
         startAlert.setTitle("Welcome");
-        startAlert.setHeaderText("Welcome to the Number Game!");
-        startAlert.setContentText("Arrange numbers in ascending order.");
-        startAlert.showAndWait();
-        startNewGame();
+        startAlert.setHeaderText("Welcome to the 20-Number Challenge! Click 'Play' to start.");
+        playButton = ((Button) startAlert.getDialogPane().lookupButton(ButtonType.OK));
+        playButton.setText("Play");
+
+        startAlert.show();
+        handleNewGame();
     }
 
-    private void startNewGame() {
+    private void handleNewGame() {
         for (int i = 0; i < MAX_BOARD_SIZE; i++) {
             board[i] = 0;
             buttons[i].setText("");
@@ -134,34 +158,26 @@ public class Board {
 
         successfulPlacements++;
         if (successfulPlacements == MAX_BOARD_SIZE) {
-            finishGame("You Won! Try again?");
+            finishGame(true);
         } else {
             currentNumber = generateNextNumber();
             highlightAvailableSpots();
             if (!canPlaceNextNumber()) {
-                finishGame("Game Over! Try again?");
+                finishGame(false);
             }
         }
         updateScoreLabel();
     }
 
-    private void finishGame(String message) {
-        totalGamesPlayed++;
-        if (message.contains("Game Over")) {
-            totalGameOver++;
+    private void finishGame(final boolean hasWon) {
+        if (hasWon)
+        {
+            finishAlert.setTitle("You Won!");
+        } else {
+            finishAlert.setTitle("Game Over!");
+            finishAlert.setHeaderText("Impossible to place the next number: " + currentNumber + ". Try again?");
         }
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, message);
-        alert.setTitle(message.contains("Won") ? "Game Won" : "Game Over");
-        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                startNewGame();
-            } else {
-                stage.close();
-            }
-        });
+        finishAlert.show();
     }
 
     private boolean canPlaceNextNumber() {
@@ -215,4 +231,27 @@ public class Board {
         totalGamesPlayed = 0;
         totalGameOver = 0;
     }
+
+    /**
+     * Resets the game state to start a new game.
+     */
+    public void resetGame() {
+        // Reset the board and buttons
+        for (int i = 0; i < MAX_BOARD_SIZE; i++) {
+            board[i] = 0;
+            buttons[i].setText("");
+            buttons[i].setDisable(false);
+        }
+        // Clear used numbers and generate the first number
+        usedNumbers.clear();
+        currentNumber = generateNextNumber();
+
+        // Reset successful placements and update the score label
+        successfulPlacements = 0;
+        updateScoreLabel();
+
+        // Highlight available spots on the board
+        highlightAvailableSpots();
+    }
+
 }

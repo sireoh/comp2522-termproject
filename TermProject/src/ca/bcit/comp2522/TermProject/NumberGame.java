@@ -46,4 +46,12 @@ public class NumberGame extends Application {
 
         board.showStartAlert();
     }
+
+    /**
+     * Resets the game to start a new round.
+     */
+    public void resetGame() {
+        board.resetGame();
+    }
+
 }
