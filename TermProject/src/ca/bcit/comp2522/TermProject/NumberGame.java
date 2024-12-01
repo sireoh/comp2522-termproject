@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 
 /**
  * NumberGame is the Number game.
+ * @author Vincent Fung
  * @version 2024
  */
 public class NumberGame extends Application {
@@ -19,7 +20,6 @@ public class NumberGame extends Application {
 
     /**
      * The main entry point of the application.
-     *
      * @param args unused.
      */
     public static void main(String[] args) {
@@ -28,13 +28,11 @@ public class NumberGame extends Application {
 
     /**
      * Starts the Number Game.
-     *
      * @param stage as a Stage.
      */
     @Override
     public void start(final Stage stage) {
-        board = new Board();
-        board.setStage(stage);
+        board = new Board(stage);
 
         VBox root = board.generateLayout();
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
@@ -51,7 +49,7 @@ public class NumberGame extends Application {
      * Resets the game to start a new round.
      */
     public void resetGame() {
-        board.resetGame();
+        board.handleNewGame();
     }
 
 }

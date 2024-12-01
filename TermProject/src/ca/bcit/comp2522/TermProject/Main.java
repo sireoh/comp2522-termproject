@@ -21,9 +21,6 @@ public class Main
         final NumberGame ng;
         boolean isStillPlaying;
         String option;
-        boolean isJavaFXStarted;
-
-        isJavaFXStarted = false;
         isStillPlaying = true;
         WordGame wg;
         MinecraftRogueLike mcrl;
