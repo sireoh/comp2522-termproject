@@ -17,6 +17,14 @@ public class MinecraftRogueLike
     private List<Card> hand;
     private final static Scanner scanner;
     private final static int STARTING_ROUND = 1;
+    private static final int CHOOSE_SWAP = 1;
+    private static final int CHOOSE_DRAW = 2;
+    private static final int TOKEN_CARD = 1;
+    private static final int WEAPON_CARD = 2;
+    private static final int ACTIVATABLE_CARD = 3;
+    private static final int STARTING_INDEX = 0;
+    private static final int MAX_CHOICE_SIZE = 2;
+    private static final int MAX_SWAP_SIZE = 3;
 
     static {
         scanner = new Scanner(System.in);
@@ -30,7 +38,7 @@ public class MinecraftRogueLike
         final ExecutorService executorService;
         executorService = Executors.newSingleThreadExecutor();
         Future<List<Card>> futureDeck;
-        futureDeck = executorService.submit(CardFactory::getDeck);
+        futureDeck = executorService.submit(CardFactory::generateDeck);
 
         try {
             deck = futureDeck.get();
@@ -40,6 +48,8 @@ public class MinecraftRogueLike
         } finally {
             executorService.shutdown();
         }
+
+        play();
     }
 
     /**
@@ -78,38 +88,37 @@ public class MinecraftRogueLike
 
     /**
      * Entry point for MyGame.
-     * @param args unused.
      */
-    public static void main(String[] args) {
-        MinecraftRogueLike game = new MinecraftRogueLike();
-        List<Card> hand = game.getHand();
-        List<Card> deck = game.getDeck();
+    public void play() {
+        List<Card> hand = getHand();
+        List<Card> deck = getDeck();
         int round = STARTING_ROUND;
 
         while (!deck.isEmpty()) {
             System.out.println("Round " + round);
-            game.printHandDetails();
+            printHandDetails();
 
             System.out.println("Choose an action:");
-            System.out.println("1. Swap card");
-            System.out.println("2. Draw from deck");
+            System.out.println(CHOOSE_SWAP + ". Swap card");
+            System.out.println(CHOOSE_DRAW + ". Draw from deck");
 
-            int choice = GameHandler.makeChoice(0, 2);
+            int choice = GameHandler.makeChoice(STARTING_INDEX, MAX_CHOICE_SIZE);
 
-            if (choice == 1) {
+            if (choice == CHOOSE_SWAP) {
                 System.out.println("You have chose to swap a card.");
                 System.out.println("Choose an action:");
-                System.out.println("1. Swap a Token card");
-                System.out.println("2. Swap a Weapon card");
-                System.out.println("3. Swap a Activatable card");
-                int secondChoice = GameHandler.makeChoice(0, 3);
+                System.out.println(TOKEN_CARD + ". Swap a Token card");
+                System.out.println(WEAPON_CARD + ". Swap a Weapon card");
+                System.out.println(ACTIVATABLE_CARD + ". Swap an Activatable card");
+
+                int secondChoice = GameHandler.makeChoice(STARTING_INDEX, MAX_SWAP_SIZE);
                 switch (secondChoice) {
-                    case 1 -> GameHandler.swapCardOfType(hand, deck, TokenCard.class);
-                    case 2 -> GameHandler.swapCardOfType(hand, deck, WeaponCard.class);
-                    case 3 -> GameHandler.swapCardOfType(hand, deck, ActivatableCard.class);
+                    case TOKEN_CARD -> GameHandler.swapCardOfType(hand, deck, TokenCard.class);
+                    case WEAPON_CARD -> GameHandler.swapCardOfType(hand, deck, WeaponCard.class);
+                    case ACTIVATABLE_CARD -> GameHandler.swapCardOfType(hand, deck, ActivatableCard.class);
                     default -> System.out.println("Invalid choice");
                 }
-            } else if (choice == 2) {
+            } else if (choice == CHOOSE_DRAW) {
                 System.out.println("You have chose to draw a card from the deck.");
                 GameHandler.drawCard(hand, deck);
             } else {
@@ -120,6 +129,6 @@ public class MinecraftRogueLike
         }
 
         System.out.println("Game Over! Final Hand:");
-        game.printHandDetails();
+        printHandDetails();
     }
 }
