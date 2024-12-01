@@ -8,10 +8,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ScoreHandler
 {
@@ -102,7 +100,7 @@ public class ScoreHandler
     }
 
     /*
-     * Han
+     * Handles creating a score object by reading the lines.
      * @param line as a String
      * @param br as a BufferedReader object.
      * @param dateTime as a LocalTime object

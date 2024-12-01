@@ -1,5 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 import ca.bcit.comp2522.TermProject.MinecraftRogueLike.MinecraftRogueLike;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.util.Scanner;
 
@@ -16,10 +18,10 @@ public class Main
         scan = new Scanner(System.in);
     }
 
-    public static void main(String[] args)
+    public static void main(final String[] args)
     {
-        final NumberGame ng;
         boolean isStillPlaying;
+
         String option;
         isStillPlaying = true;
         WordGame wg;

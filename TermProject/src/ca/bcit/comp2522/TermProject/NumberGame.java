@@ -1,6 +1,7 @@
 package ca.bcit.comp2522.TermProject;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -32,6 +33,7 @@ public class NumberGame extends Application {
      */
     @Override
     public void start(final Stage stage) {
+
         board = new Board(stage);
 
         VBox root = board.generateLayout();

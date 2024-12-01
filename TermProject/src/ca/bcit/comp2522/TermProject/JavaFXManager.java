@@ -16,6 +16,8 @@ public class JavaFXManager {
      * a new thread.
      */
     public static void startNumberGame() {
+        Platform.setImplicitExit(false);
+
         if (!isJavaFXInitialized) {
             new Thread(() -> {
                 try {

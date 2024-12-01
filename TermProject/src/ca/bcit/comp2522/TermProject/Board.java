@@ -58,7 +58,9 @@ public class Board extends NumberGameAbstractClass implements NumberGameInterfac
 
     @Override
     public void handleStyling(final Scene scene) {
-        final String css = String.valueOf(getClass().getResource("styles.css"));
+        final String css;
+        css = String.valueOf(getClass().getResource("styles.css"));
+
         if (css != null) {
             scene.getStylesheets().add(css);
         }
@@ -66,7 +68,9 @@ public class Board extends NumberGameAbstractClass implements NumberGameInterfac
 
     @Override
     public void showStartAlert() {
-        Alert startAlert = new Alert(Alert.AlertType.INFORMATION);
+        final Alert startAlert;
+        startAlert = new Alert(Alert.AlertType.INFORMATION);
+
         startAlert.setTitle("Welcome");
         startAlert.setHeaderText("Welcome to the 20-Number Challenge! Click 'Play' to start.");
         startAlert.show();
