@@ -58,7 +58,7 @@ public class MinecraftRogueLike
      */
     public void printHandDetails()
     {
-        hand.forEach(card -> System.out.println("- " + card.toString()));
+        hand.forEach(card -> System.out.println(card.toString()));
     }
 
     /**

@@ -11,6 +11,7 @@ import java.util.List;
 public class EventCard extends Card {
     private final String cardDescription;
     private final List<String> requiredCards;
+    private final static String CARD_BORDER_LINE = "+----------------------------------+\n";
 
     /**
      * Constructs an {@code EventCard} with the specified name.
@@ -38,14 +39,30 @@ public class EventCard extends Card {
                 requiredCards.add("FlintAndSteel");
             }
             case "Blaze" -> requiredCards.add("EnderPearl");
-            default -> System.out.println("Error.");
         }
+    }
+
+    /*
+     * Helper function that gives the requirements as a String
+     * @return the requirements as a string
+     */
+    private String getRequiredCards()
+    {
+        StringBuilder output;
+        output = new StringBuilder();
+
+        for (final String requiredCard : requiredCards)
+        {
+            output.append(formatCard(requiredCard)).append("\n");
+        }
+
+        return output.toString();
     }
 
     /*
      * Handles the attack accuracy depending on what card it is.
      * @param name as the name of the card to set
-     * @return the int the card should have
+     * @return the String the card should have
      */
     private String handleDescription(final String name)
     {
@@ -75,12 +92,19 @@ public class EventCard extends Card {
         final StringBuilder sb;
         sb = new StringBuilder();
 
-        sb.append("+------------------+");
-        sb.append(formatCard(super.getName()));
-        sb.append(formatCard("Event"));
-        sb.append("+------------------+");
-        sb.append(formatCard(cardDescription));
-        sb.append("+------------------+");
+        sb.append(CARD_BORDER_LINE);
+        sb.append(formatCard(super.getName())).append("\n");
+        sb.append(formatCard("Event")).append("\n");
+        sb.append(CARD_BORDER_LINE);
+        sb.append(formatCard(cardDescription)).append("\n");
+
+        if (!requiredCards.isEmpty()) {
+            sb.append(formatCard("Required:")).append("\n");
+            sb.append(getRequiredCards());
+        }
+
+        sb.append(CARD_BORDER_LINE);
         return sb.toString();
     }
+
 }

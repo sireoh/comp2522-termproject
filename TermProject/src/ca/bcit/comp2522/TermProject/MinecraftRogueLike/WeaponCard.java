@@ -7,9 +7,11 @@ package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
  */
 public class WeaponCard extends Card {
     private final int attackAccuracy;
+    private final String cardDescription;
     private final static int MIN_ACCURACY = 30;
     private final static int MAX_ACCURACY = 100;
     private final static int EMPTY_ACCURACY = 0;
+    private final static String CARD_BORDER_LINE = "+----------------------------------+\n";
 
     /**
      * Constructs a {@code WeaponCard} with the specified name.
@@ -18,6 +20,21 @@ public class WeaponCard extends Card {
     public WeaponCard(final String name) {
         super(name);
         attackAccuracy = handleAccuracy(name);
+        cardDescription = handleDescription(name);
+    }
+
+    /*
+     * Handles the attack accuracy depending on what card it is.
+     * @param name as the name of the card to set
+     * @return the String the card should have
+     */
+    private String handleDescription(final String name)
+    {
+        if (name.equals("EnchantedNetheriteSword")) {
+            return "OHKO's the dragon";
+        } else {
+            return "";
+        }
     }
 
     /*
@@ -61,12 +78,19 @@ public class WeaponCard extends Card {
         final StringBuilder sb;
         sb = new StringBuilder();
 
-        sb.append("+------------------+");
-        sb.append(formatCard(super.getName()));
-        sb.append(formatCard("Weapon"));
-        sb.append("+------------------+");
-        sb.append(formatCard(attackAccuracy + "% ATK ACC"));
-        sb.append("+------------------+");
+        sb.append(CARD_BORDER_LINE);
+        sb.append(formatCard(super.getName())).append("\n");
+        sb.append(formatCard("Weapon")).append("\n");
+        sb.append(CARD_BORDER_LINE);
+
+        if (attackAccuracy != EMPTY_ACCURACY) {
+            sb.append(formatCard(attackAccuracy + "% ATK ACC")).append("\n");
+        } else {
+            sb.append(formatCard(cardDescription)).append("\n");
+        }
+
+        sb.append(CARD_BORDER_LINE);
         return sb.toString();
     }
+
 }

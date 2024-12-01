@@ -6,12 +6,18 @@ package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
  * @version 2024
  */
 public class TokenCard extends Card {
+    final StringBuilder sb;
+    final static int EMPTY_STRING_BUILDER = 0;
+    private final static String CARD_BORDER_LINE = "+----------------------------------+\n";
+
     /**
      * Constructs a {@code TokenCard} with the specified name.
      * @param name the name of the token card
      */
     public TokenCard(final String name) {
         super(name);
+
+        sb = new StringBuilder();
     }
 
     /**
@@ -19,7 +25,14 @@ public class TokenCard extends Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(super.getName() + " (Token)");
+        sb.setLength(EMPTY_STRING_BUILDER);
+
+        sb.append("+------------------+");
+        sb.append(formatCard(super.getName()));
+        sb.append(formatCard("Token"));
+        sb.append("+------------------+");
+        sb.append("+------------------+");
+        System.out.println(sb.toString());
     }
 
     /**
@@ -28,6 +41,12 @@ public class TokenCard extends Card {
      */
     @Override
     public String toString() {
-        return super.getName() + " (Token)";
+        sb.setLength(EMPTY_STRING_BUILDER);
+
+        sb.append(CARD_BORDER_LINE);
+        sb.append(formatCard(super.getName())).append("\n");
+        sb.append(formatCard("Token")).append("\n");
+        sb.append(CARD_BORDER_LINE);
+        return sb.toString();
     }
 }

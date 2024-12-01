@@ -8,8 +8,10 @@ import java.util.stream.Collectors;
  */
 public class GameHandler {
     private final static Scanner scanner;
+    private final static Card card;
 
     static {
+        card = new EventCard("");
         scanner = new Scanner(System.in);
     }
 
@@ -116,7 +118,7 @@ public class GameHandler {
         chosenCard = cardsToChooseFrom.get(choice-1);
 
         System.out.println("You chose: " + choice);
-        System.out.println("- " + chosenCard);
+        System.out.println(chosenCard);
 
         return chosenCard;
     }
@@ -132,7 +134,9 @@ public class GameHandler {
         // Iterate through the list of cards and print the options in the desired format
         for (int i = 0; i < cardsToChooseFrom.size(); i++) {
             cardOption = cardsToChooseFrom.get(i);
-            System.out.println((i + 1) + " - " + cardOption.getName());
+            System.out.println("+----------------------------------+");
+            System.out.printf(card.formatCard("Add to deck, enter: %d") + "\n", (i + 1));
+            System.out.println(cardOption);
         }
     }
 
