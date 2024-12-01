@@ -1,4 +1,5 @@
 package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -50,6 +51,16 @@ public class MinecraftRogueLike
         }
 
         play();
+    }
+
+    /**
+     * Constructor for Testing Purposes
+     * @param testDeck as the test deck
+     * @param testHand as the test hand
+     */
+    public MinecraftRogueLike(List<Card> testDeck, List<Card> testHand) {
+        this.deck = new ArrayList<>(testDeck);
+        this.hand = new ArrayList<>(testHand);
     }
 
     /**
