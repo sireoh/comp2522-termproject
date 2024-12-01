@@ -19,4 +19,15 @@ public abstract class Card {
     }
 
     abstract void printDetails();
+
+    public String formatCard(final String stringToFormat)
+    {
+        // Total length of the card (including pipes), e.g., 18 characters in total
+        int totalLength = 18;
+
+        // Calculate the padding required on each side to center the card name
+        int padding = (totalLength - stringToFormat.length() - 2) / 2;
+
+        return "|" + " ".repeat(padding) + stringToFormat + " ".repeat(totalLength - stringToFormat.length() - padding - 2) + "|";
+    };
 }
