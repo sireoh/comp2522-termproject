@@ -66,7 +66,7 @@ public class WordGame
         setupScoreFile();
 
         while (isPlaying) {
-//            play();
+            play();
 
             System.out.println("Thanks for playing !!");
             do {
@@ -137,6 +137,7 @@ public class WordGame
                 }
 
                 if (currentAttempt == INCORRECT_AFTER_TWO_ATTEMPTS) {
+                    System.out.println("The correct answer was: " + questions[currentQuestionIndex].getName() + ", " + questions[currentQuestionIndex].getCapitalCityName());
                     System.out.println("Ran out of tries, next question.");
 
                     attempts.put(INCORRECT_AFTER_TWO_ATTEMPTS, attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS) + INCREMENT_AMOUNT);
@@ -202,7 +203,7 @@ public class WordGame
             default -> "No function called";
         };
 
-        System.out.println(questionText + "\t" + questions[currentQuestionIndex].getName() + ", " + questions[currentQuestionIndex].getCapitalCityName());
+        System.out.println(questionText);
     }
 
     /*
