@@ -129,13 +129,12 @@ public class GameHandler {
      */
     private static void generateOptionsList(final List<Card> cardsToChooseFrom) {
         Card cardOption;
-        System.out.println("Choose a card:");
 
         // Iterate through the list of cards and print the options in the desired format
         for (int i = 0; i < cardsToChooseFrom.size(); i++) {
             cardOption = cardsToChooseFrom.get(i);
             System.out.println("+----------------------------------+");
-            System.out.printf(card.formatCard("Add to deck, enter: %d") + "\n", (i + 1));
+            System.out.printf(card.formatCard("To choose, enter: %d") + "\n", (i + 1));
             System.out.println(cardOption);
         }
     }

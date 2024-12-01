@@ -53,7 +53,7 @@ public class EventCard extends Card {
 
         for (final String requiredCard : requiredCards)
         {
-            output.append(formatCard(requiredCard)).append("\n");
+            output.append(formatCard("- " + requiredCard)).append("\n");
         }
 
         return output.toString();
@@ -80,7 +80,7 @@ public class EventCard extends Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(super.getName() + " (Event)");
+        System.out.println(toString());
     }
 
     /**

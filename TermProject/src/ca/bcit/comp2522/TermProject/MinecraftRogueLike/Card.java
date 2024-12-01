@@ -1,14 +1,21 @@
 package ca.bcit.comp2522.TermProject.MinecraftRogueLike;
 
 /**
- * Card interface, represents a card.
+ * Abstract Card class, parent of Cards.
  * @author Vincent Fung
  * @version 2024
  */
 public abstract class Card {
     private final String name;
+    private final static int OFFSET = 1;
+    private final static String PIPES = "||";
+    private final static String CARD_BORDER_LINE = "+----------------------------------+";
 
-    Card(final String name)
+    /**
+     * Card constructor for Card object.
+     * @param name as a String
+     */
+    public Card(final String name)
     {
         this.name = name;
     }
@@ -20,17 +27,28 @@ public abstract class Card {
 
     abstract void printDetails();
 
+    /**
+     * Helper function that formats the card correctly.
+     * @param stringToFormat as the string to format
+     * @return the formattedCard as a String.
+     */
     public String formatCard(final String stringToFormat) {
-        // Updated total length of the card (including pipes), adjusted for longer boundaries
-        int totalLength = 36; // Default width including pipes
-        int lengthToCalc = stringToFormat.contains("%d")
-                ? stringToFormat.length() - 1
+        final int totalLength;
+        final int lengthToCalc;
+        final int padding;
+        final String output;
+
+        totalLength = CARD_BORDER_LINE.length();
+        lengthToCalc = stringToFormat.contains("%d")
+                ? stringToFormat.length() - OFFSET
                 : stringToFormat.length();
 
         // Calculate the padding required on each side to center the card name
-        int padding = (totalLength - lengthToCalc - 2) / 2; // Subtract 2 for pipes
+        padding = (totalLength - lengthToCalc - PIPES.length()) / PIPES.length();
+        output = "|" + " ".repeat(padding) +
+                stringToFormat + " ".repeat(totalLength - lengthToCalc - padding - PIPES.length()) + "|";
 
-        return "|" + " ".repeat(padding) + stringToFormat + " ".repeat(totalLength - lengthToCalc - padding - 2) + "|";
+        return output;
     }
 
 

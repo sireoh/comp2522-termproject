@@ -39,7 +39,7 @@ public class ActivatableCard extends Card {
                 obtainedCards.add("FlintAndSteel");
             }
             case "IronOre" -> obtainedCards.add("WaterBucket");
-            case "GoldOre" -> obtainedCards.add("EnderPearls");
+            case "GoldIngots" -> obtainedCards.add("EnderPearls");
         }
     }
     /*
@@ -53,7 +53,7 @@ public class ActivatableCard extends Card {
 
         for (final String requiredCard : obtainedCards)
         {
-            output.append(formatCard(requiredCard)).append("\n");
+            output.append(formatCard("- " + requiredCard)).append("\n");
         }
 
         return output.toString();
@@ -64,7 +64,7 @@ public class ActivatableCard extends Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(super.getName() + " (Activatable)");
+        System.out.println(toString());
     }
 
     /*
@@ -98,6 +98,7 @@ public class ActivatableCard extends Card {
 
         if (!obtainedCards.isEmpty()) {
             sb.append(formatCard("to obtain")).append("\n");
+            sb.append(formatCard("either:")).append("\n");
             sb.append(getObtainedCards());
         }
 

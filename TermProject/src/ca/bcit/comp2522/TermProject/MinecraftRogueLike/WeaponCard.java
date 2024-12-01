@@ -12,6 +12,7 @@ public class WeaponCard extends Card {
     private final static int MAX_ACCURACY = 100;
     private final static int EMPTY_ACCURACY = 0;
     private final static String CARD_BORDER_LINE = "+----------------------------------+\n";
+    private final static String EMPTY_STRING = "";
 
     /**
      * Constructs a {@code WeaponCard} with the specified name.
@@ -30,11 +31,13 @@ public class WeaponCard extends Card {
      */
     private String handleDescription(final String name)
     {
-        if (name.equals("EnchantedNetheriteSword")) {
-            return "OHKO's the dragon";
-        } else {
-            return "";
-        }
+        return switch(name)
+        {
+            case "EnchantedNetheriteSword" -> "OHKO's the dragon";
+            case "StoneSword" -> "Generic RPG item";
+            case "Bow" -> "64 Arrows";
+            default -> EMPTY_STRING;
+        };
     }
 
     /*
@@ -66,7 +69,7 @@ public class WeaponCard extends Card {
      */
     @Override
     public void printDetails() {
-        System.out.println(super.getName() + " (Weapon)");
+        System.out.println(toString());
     }
 
     /**

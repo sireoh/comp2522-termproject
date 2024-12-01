@@ -24,6 +24,7 @@ public class MinecraftRogueLike
 
     /**
      * Initialises the deck and hand.
+     * Uses Concurrency to handle the file reading.
      */
     public MinecraftRogueLike() {
         final ExecutorService executorService;
