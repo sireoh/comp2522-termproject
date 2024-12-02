@@ -71,4 +71,21 @@ public class WeaponCard extends Card {
         return sb.toString();
     }
 
+    /**
+     * Plays the WeaponCard.
+     */
+    public void play(){
+        if(super.getName().equals("EnchantedNetheriteSword"))
+        {
+            System.out.println("Playing: " + super.getName());
+        }
+        else if(super.getName().equals("Bow"))
+        {
+            System.out.println("Playing: " + super.getName());
+        }
+        else
+        {
+            System.out.println("Playing generic weapon card.");
+        }
+    }
 }

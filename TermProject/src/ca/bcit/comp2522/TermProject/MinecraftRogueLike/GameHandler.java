@@ -280,4 +280,20 @@ public class GameHandler {
             }
         }
     }
+
+    /**
+     * Handles the yes or no choice specifically for weapons.
+     */
+    public static void handlePlayWeaponCard(final CardInvoker invoker)
+    {
+        switch(makeChoiceYesNo())
+        {
+            case CHOICE_YES -> {
+                BossFightEventHandler.winGame();
+                BossFightEventHandler.endGame();
+                invoker.invokeCard();
+            }
+            case CHOICE_NO -> System.out.println("You didn't play the weapon card.");
+        }
+    }
 }

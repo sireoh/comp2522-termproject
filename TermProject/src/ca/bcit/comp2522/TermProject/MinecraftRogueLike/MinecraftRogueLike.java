@@ -168,7 +168,7 @@ public class MinecraftRogueLike
 
         BossFightEventHandler.handleBossFightLoop(hand);
 
-        System.out.println("Game Over! Final Hand:");
+        System.out.println("Final Hand:");
 
         printHandDetails();
     }

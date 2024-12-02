@@ -64,5 +64,4 @@ public class EventCard extends Card {
         sb.append(CARD_BORDER_LINE);
         return sb.toString();
     }
-
 }
