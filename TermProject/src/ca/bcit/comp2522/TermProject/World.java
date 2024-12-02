@@ -22,6 +22,7 @@ public class World
     private final static int NAME_AND_CAPITAL_SIZE = 2;
     private final static int CAPITAL_INDEX = 1;
     private final static int FACTS_SIZE = 3;
+
     /**
      * World constructor.
      */
@@ -45,10 +46,12 @@ public class World
      * @param countryPath as a Path.
      * @param countries as a Hashmap.
      */
-    private static void parseCountry(final Path countryPath, final Map<String, Country> countries)
+    private static void parseCountry(final Path countryPath,
+                                     final Map<String, Country> countries)
     {
         try (final BufferedReader br = Files.newBufferedReader(countryPath))
         {
+            Country countryToAdd;
             String currentLine;
             currentLine = br.readLine();
 
@@ -82,8 +85,8 @@ public class World
                     if (fact != null) { factList[i] = fact; }
                 }
 
-                Country c = new Country(nameAndCapital[NAME_INDEX], nameAndCapital[CAPITAL_INDEX], factList);
-                countries.put(nameAndCapital[NAME_INDEX], c);
+                countryToAdd = new Country(nameAndCapital[NAME_INDEX], nameAndCapital[CAPITAL_INDEX], factList);
+                countries.put(nameAndCapital[NAME_INDEX], countryToAdd);
 
                 currentLine = br.readLine();
             }

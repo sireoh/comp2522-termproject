@@ -21,7 +21,7 @@ Week 5: Arrays, Collections, and Iterators
     Arrays - CardFactory class::generateDeck method, when I call the split method.
     Collections(List, Map, Set) - MinecraftRogueLike class for List<Card> deck and hand.
     Enhanced For Loop - ActivatableCard class::getObtainedCards method,
-    Generics Collections - Not used.
+    Collections - Collections.sort(deck) method.
     Iterators - Not used.
 
 Week 6: Generics and Nested Class.
@@ -41,7 +41,7 @@ Week 8: Files, Paths and Streaming
     Random - Not used, as I used Collections.shuffle instead.
 
 Week 9: GUIs
-    JavaFX - Not used.
+    JavaFX - In JavaFXManager.
     Threading - In JavaFXManager
     
 Week 10: Unit Testing
@@ -51,9 +51,9 @@ Week 11: Design Patterns
     Singleton - JavaFXManager class.
     Factory - CardFactory class.
     Abstract Factory - CardFactory class
-    Command - Plan to use in the future with CardAction class,
+    Command - CardCommand class, CardInvoker, WeaponCommand class. It does all the actions for the Bow and EnchantedNetheriteSword.
     Decorator - Not used.
-    Observer - Plan to use in the future with CardObserver class,
+    Observer - Not used.
 
 Week 12: Concurrency
     Thread - In JavaFXManager

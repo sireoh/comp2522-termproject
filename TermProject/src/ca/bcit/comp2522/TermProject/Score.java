@@ -32,7 +32,7 @@ public class Score
      * @param numIncorrectTwoAttempts as an int.
      */
     public Score(final LocalDateTime currentTime,
-                final int numGamesPlayed,
+                 final int numGamesPlayed,
                  final int numCorrectFirstAttempt,
                  final int numCorrectSecondAttempt,
                  final int numIncorrectTwoAttempts)
@@ -49,7 +49,8 @@ public class Score
     /**
      * Empty Constructor.
      */
-    public Score(){
+    public Score()
+    {
         final LocalDateTime currentTime;
 
         currentTime = LocalDateTime.now();
@@ -102,8 +103,10 @@ public class Score
      * Calculates the total score.
      * @return the totalScore as an int.
      */
-    public int getScore(){
-        int total;
+    public int getScore()
+    {
+        final int total;
+
         total = ((numCorrectFirstAttempt) * NUM_CORRECT_FIRST_ATTEMPT_MULTIPLIER) +
                 numCorrectSecondAttempt;
 
@@ -149,6 +152,7 @@ public class Score
     {
         final LocalDateTime dateTime;
         dateTime = LocalDateTime.now();
+
         return String.format(
                 "Date and Time: %s\n" +
                 "Games Played: %d\n" +

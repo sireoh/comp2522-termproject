@@ -31,8 +31,11 @@ public class Board extends NumberGameAbstractClass implements NumberGameInterfac
 
     @Override
     public VBox generateLayout() {
-        VBox root = new VBox(SPACING);
-        GridPane gridLayout = new GridPane();
+        final VBox root;
+        final GridPane gridLayout;
+
+        root = new VBox(SPACING);
+        gridLayout = new GridPane();
 
         scoreLabel = new Label("Next number: " + currentNumber + " - Select a slot.");
         scoreLabel.setMaxWidth(SCENE_WIDTH);
@@ -41,7 +44,8 @@ public class Board extends NumberGameAbstractClass implements NumberGameInterfac
         gridLayout.setHgap(SPACING);
         gridLayout.setVgap(SPACING);
 
-        for (int i = STARTING_INDEX; i < MAX_BOARD_SIZE; i++) {
+        for (int i = STARTING_INDEX; i < MAX_BOARD_SIZE; i++)
+        {
             final int index;
             index = i;
             buttonList[i] = new Button();
@@ -56,23 +60,33 @@ public class Board extends NumberGameAbstractClass implements NumberGameInterfac
         return root;
     }
 
+    /**
+     * Handles the styling of the Board.
+     * @param scene as a Scene object.
+     */
     @Override
-    public void handleStyling(final Scene scene) {
+    public void handleStyling(final Scene scene)
+    {
         final String css;
         css = String.valueOf(getClass().getResource("styles.css"));
 
-        if (css != null) {
+        if (css != null)
+        {
             scene.getStylesheets().add(css);
         }
     }
 
+    /**
+     * Shows the start alert.
+     */
     @Override
     public void showStartAlert() {
         final Alert startAlert;
-        startAlert = new Alert(Alert.AlertType.INFORMATION);
 
+        startAlert = new Alert(Alert.AlertType.INFORMATION);
         startAlert.setTitle("Welcome");
         startAlert.setHeaderText("Welcome to the 20-Number Challenge! Click 'Play' to start.");
+
         startAlert.show();
         handleNewGame();
     }

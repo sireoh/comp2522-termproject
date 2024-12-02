@@ -11,7 +11,8 @@ import javafx.stage.Stage;
  * @author Vincent Fung
  * @version 2024
  */
-public class NumberGame extends Application {
+public class NumberGame extends Application
+{
 
     private static final String NUMBER_GAME_TITLE = "Number Game";
     private static final int SCENE_WIDTH = 800;
@@ -23,17 +24,15 @@ public class NumberGame extends Application {
      * The main entry point of the application.
      * @param args unused.
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
 
     /**
      * Starts the Number Game.
-     * @param stage as a Stage.
      */
-    @Override
-    public void start(final Stage stage) {
-
+    public void start(final Stage stage)
+    {
         board = new Board(stage);
 
         VBox root = board.generateLayout();

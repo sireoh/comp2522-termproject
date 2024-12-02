@@ -28,10 +28,20 @@ public class BossFightEventHandler
         playOHKOSword = new WeaponCommand(OHKOSword);
         playBow = new WeaponCommand(bow);
 
-        hasBossFightStarted = true;
+        hasBossFightStarted = false;
         gameHasEnded = false;
         userHasWon = false;
         round = BOSS_FIGHT_STARTING_ROUND;
+    }
+
+    /**
+     * Resets the boss event when the user starts a new game.
+     */
+    public static void resetBossEvent()
+    {
+        hasBossFightStarted = false;
+        gameHasEnded = false;
+        userHasWon = false;
     }
 
     /**

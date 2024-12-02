@@ -24,21 +24,25 @@ public class ScoreHandler
      * @param outputFileName as the outputFile to create.
      * @throws IOException if there are file reading errors.
      */
-    public static void appendScoreToFile(final Score score, final String outputFileName) throws IOException {
-        final Path outputPath = Paths.get(OUTPUT_DIRECTORY); // Directory path
-        final Path outputFile = Paths.get(OUTPUT_DIRECTORY, outputFileName); // Full file path
+    public static void appendScoreToFile(final Score score,
+                                         final String outputFileName) throws IOException
+    {
+        final Path outputPath;
+        final Path outputFile;
 
-        // Create the output directory if it doesn't exist
-        if (Files.notExists(outputPath)) {
+        outputPath = Paths.get(OUTPUT_DIRECTORY);
+        outputFile = Paths.get(OUTPUT_DIRECTORY, outputFileName);
+
+        if (Files.notExists(outputPath))
+        {
             Files.createDirectories(outputPath);
         }
 
-        // Create the output file if it doesn't exist
-        if (Files.notExists(outputFile)) {
+        if (Files.notExists(outputFile))
+        {
             Files.createFile(outputFile);
         }
 
-        // Append the score data to the file
         Files.write(outputFile, createScoreList(score), StandardOpenOption.APPEND);
         Files.writeString(outputFile, "\n", StandardOpenOption.APPEND);
     }
@@ -50,17 +54,18 @@ public class ScoreHandler
      * @return List<Score> of all the Scores in the file.
      * @throws IOException if file could not be parsed.
      */
-    public static List<Score> readScoresFromFile(final String inputFileName) throws IOException {
+    public static List<Score> readScoresFromFile(final String inputFileName) throws IOException
+    {
         final List<Score> scoreList;
         final DateTimeFormatter formatter;
         final Path inputFile;
+
         String dateTimeString;
         LocalDateTime dateTime;
 
         scoreList = new ArrayList<>();
         formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         inputFile = Paths.get(inputFileName);
-
 
         try (final BufferedReader br = Files.newBufferedReader(inputFile)) {
             String line;
@@ -71,11 +76,10 @@ public class ScoreHandler
                     dateTime = LocalDateTime.parse(dateTimeString, formatter);
 
                     // Extract the rest.
-                    scoreList.add(createScoreFromParsing(line, br, dateTime));
+                    scoreList.add(createScoreFromParsing(br, dateTime));
                 }
             }
         }
-
         return scoreList;
     }
 
@@ -107,9 +111,10 @@ public class ScoreHandler
      * @return a score parsed from the fie.
      * @throws IOException if a file cannot be found.
      */
-    private static Score createScoreFromParsing(String line, final BufferedReader br, final LocalDateTime dateTime) throws IOException
+    private static Score createScoreFromParsing(final BufferedReader br, final LocalDateTime dateTime) throws IOException
     {
-        Score temp;
+        final Score temp;
+        String line;
 
         // Read the next lines to extract other information
         int numGamesPlayed = STARTING_VALUE;

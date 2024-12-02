@@ -1,14 +1,11 @@
 package ca.bcit.comp2522.TermProject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The Word Game
@@ -115,16 +112,18 @@ public class WordGame
 
             typeOfQuestion = random.nextInt(QUESTION_TYPE_SIZE);
 
-            while (currentAttempt <= MAX_ATTEMPT_SIZE) {
+            while (currentAttempt < MAX_ATTEMPT_SIZE) {
                 handleAskingQuestion(typeOfQuestion);
 
                 if (checkIfQuestionIsCorrect(typeOfQuestion)) {
                     System.out.println("Correct!");
 
                     if (currentAttempt == (CORRECT_ON_FIRST_ATTEMPT - OFFSET)) {
-                        attempts.put(CORRECT_ON_FIRST_ATTEMPT, attempts.get(CORRECT_ON_FIRST_ATTEMPT) + INCREMENT_AMOUNT);
+                        attempts.put(CORRECT_ON_FIRST_ATTEMPT,
+                                attempts.get(CORRECT_ON_FIRST_ATTEMPT) + INCREMENT_AMOUNT);
                     } else if (currentAttempt == (CORRECT_ON_SECOND_ATTEMPT - OFFSET)) {
-                        attempts.put(CORRECT_ON_SECOND_ATTEMPT, attempts.get(CORRECT_ON_SECOND_ATTEMPT) + INCREMENT_AMOUNT);
+                        attempts.put(CORRECT_ON_SECOND_ATTEMPT,
+                                attempts.get(CORRECT_ON_SECOND_ATTEMPT) + INCREMENT_AMOUNT);
                     }
 
                     currentQuestionIndex++;
@@ -136,11 +135,14 @@ public class WordGame
                     currentAttempt++;
                 }
 
-                if (currentAttempt == INCORRECT_AFTER_TWO_ATTEMPTS) {
-                    System.out.println("The correct answer was: " + questions[currentQuestionIndex].getName() + ", " + questions[currentQuestionIndex].getCapitalCityName());
+                if (currentAttempt == INCORRECT_AFTER_TWO_ATTEMPTS - OFFSET) {
+                    System.out.println("The correct answer was: " +
+                            questions[currentQuestionIndex].getName() +
+                            ", " + questions[currentQuestionIndex].getCapitalCityName());
                     System.out.println("Ran out of tries, next question.");
 
-                    attempts.put(INCORRECT_AFTER_TWO_ATTEMPTS, attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS) + INCREMENT_AMOUNT);
+                    attempts.put(INCORRECT_AFTER_TWO_ATTEMPTS,
+                            attempts.get(INCORRECT_AFTER_TWO_ATTEMPTS) + INCREMENT_AMOUNT);
                     currentAttempt = START_INDEX;
                     currentQuestionIndex++;
                     printScore();
@@ -198,8 +200,10 @@ public class WordGame
 
         questionText = switch (typeOfQuestion) {
             case QUESTION_TYPE_RANDOM_FACT -> handleFactQuestion(randomFact);
-            case QUESTION_TYPE_WHICH_CAPITAL -> questions[currentQuestionIndex].getCapitalCityName() + " is the capital of which country?";
-            case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of " + questions[currentQuestionIndex].getName() + "?";
+            case QUESTION_TYPE_WHICH_CAPITAL -> questions[currentQuestionIndex].getCapitalCityName() +
+                    " is the capital of which country?";
+            case QUESTION_TYPE_WHICH_COUNTRY -> "What is the capital of " +
+                    questions[currentQuestionIndex].getName() + "?";
             default -> "No function called";
         };
 

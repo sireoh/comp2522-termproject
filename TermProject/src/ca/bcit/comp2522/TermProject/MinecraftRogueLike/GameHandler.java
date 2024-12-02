@@ -48,7 +48,8 @@ public class GameHandler {
      * @param hand the player's current hand
      * @param deck the deck of cards to draw from
      */
-    public static void drawCard(final List<Card> hand, final List<Card> deck) {
+    public static void drawCard(final List<Card> hand,
+                                final List<Card> deck) {
         final Card drawnCard;
 
         if (deck.isEmpty()) {
@@ -65,7 +66,9 @@ public class GameHandler {
      * @param deck as the List representing remaining cards in the deck.
      * @param type as the type of card.
      */
-    public static void swapCardOfType(final List<Card> hand, final List<Card> deck, final Class<? extends Card> type) {
+    public static void swapCardOfType(final List<Card> hand,
+                                      final List<Card> deck,
+                                      final Class<? extends Card> type) {
         final Card chosenCardFromHand;
         final Card chosenCardFromDeck;
         final List<Card> filteredDeck;
@@ -145,7 +148,7 @@ public class GameHandler {
         missingCards = new ArrayList<>();
 
         // Check for missing required cards
-        for (String required : requiredCards) {
+        for (final String required : requiredCards) {
             if (!handCardNames.contains(required)) {
                 missingCards.add(required);
             }
@@ -169,9 +172,12 @@ public class GameHandler {
                 removeCardByName(hand, cardName);
                 removeCardByName(deck, cardName);
             }
-        } else {
+        }
+        else
+        {
             System.out.println("Missing required cards:");
-            for (String missing : missingCards) {
+            for (String missing : missingCards)
+            {
                 System.out.println("- " + missing);
             }
         }
@@ -185,10 +191,11 @@ public class GameHandler {
         Card cardOption;
 
         // Iterate through the list of cards and print the options in the desired format
-        for (int i = 0; i < cardsToChooseFrom.size(); i++) {
+        for (int i = STARTING_INDEX; i < cardsToChooseFrom.size(); i++)
+        {
             cardOption = cardsToChooseFrom.get(i);
             System.out.println("+----------------------------------+");
-            System.out.printf(card.formatCard("To choose, enter: %d") + "\n", (i + 1));
+            System.out.printf(card.formatCard("To choose, enter: %d") + "\n", (i + OFFSET));
             System.out.println(cardOption);
         }
     }
@@ -244,7 +251,7 @@ public class GameHandler {
                 {
                     System.out.println("Invalid choice, please choose again.");
                 }
-            } catch(NumberFormatException e)
+            } catch(final NumberFormatException e)
             {
                 System.out.println("Please enter a valid number.");
             }
@@ -262,10 +269,12 @@ public class GameHandler {
         {
             try
             {
+                final int choice;
+
                 System.out.println("Decide Your Fate:");
                 System.out.println("1. Yes");
                 System.out.println("2. No");
-                final int choice;
+
                 choice = Integer.parseInt(scanner.nextLine().trim());
                 if(choice == CHOICE_NO || choice == CHOICE_YES)
                 {
@@ -288,7 +297,8 @@ public class GameHandler {
     {
         switch(makeChoiceYesNo())
         {
-            case CHOICE_YES -> {
+            case CHOICE_YES ->
+            {
                 BossFightEventHandler.winGame();
                 BossFightEventHandler.endGame();
                 invoker.invokeCard();

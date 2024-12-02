@@ -1,7 +1,5 @@
 package ca.bcit.comp2522.TermProject;
 import ca.bcit.comp2522.TermProject.MinecraftRogueLike.MinecraftRogueLike;
-import javafx.application.Platform;
-import javafx.stage.Stage;
 
 import java.util.Scanner;
 
@@ -14,50 +12,51 @@ public class Main
 {
     final static Scanner scan;
 
-    static {
+    static
+    {
         scan = new Scanner(System.in);
     }
 
     public static void main(final String[] args)
     {
         boolean isStillPlaying;
-
         String option;
+
         isStillPlaying = true;
         WordGame wg;
         MinecraftRogueLike mcrl;
 
-       do
-       {
-           System.out.println("Please choose an option:");
-           System.out.println("Press W to play the Word game.");
-           System.out.println("Press N to play the Number game.");
-           System.out.println("Press M to play the MinecraftRogueLike game.");
-           System.out.println("Press Q to quit.");
+        do
+        {
+            System.out.println("Please choose an option:");
+            System.out.println("Press W to play the Word game.");
+            System.out.println("Press N to play the Number game.");
+            System.out.println("Press M to play the MinecraftRogueLike game.");
+            System.out.println("Press Q to quit.");
 
-           option = makeChoice();
+            option = makeChoice();
 
-           switch(option)
-           {
-               case "w" -> {
-                   System.out.println("Starting the word game.");
-                   wg = new WordGame();
-               }
-               case "n" -> {
-                   System.out.println("Starting the number game.");
-                   JavaFXManager.getInstance().startNumberGame();
-               }
-               case "m" -> {
-                   System.out.println("Starting the minecraft game.");
-                   mcrl = new MinecraftRogueLike();
-               }
-               case "q" -> {
-                   System.out.println("Thanks for playing !!!");
-                   isStillPlaying = false;
-               }
-               default -> System.out.println("please enter a valid character.");
-           }
-       } while (isStillPlaying);
+            switch(option)
+            {
+                case "w" -> {
+                    System.out.println("Starting the word game.");
+                    wg = new WordGame();
+                }
+                case "n" -> {
+                    System.out.println("Starting the number game.");
+                    JavaFXManager.getInstance().startNumberGame();
+                }
+                case "m" -> {
+                    System.out.println("Starting the minecraft game.");
+                    mcrl = new MinecraftRogueLike();
+                }
+                case "q" -> {
+                    System.out.println("Thanks for playing !!!");
+                    isStillPlaying = false;
+                }
+                default -> System.out.println("please enter a valid character.");
+            }
+        } while (isStillPlaying);
     }
 
     /**

@@ -21,10 +21,14 @@ public class JavaFXManager {
      * Returns the singleton instance of the JavaFXManager.
      * @return The singleton instance.
      */
-    public static JavaFXManager getInstance() {
-        if (instance == null) {
-            synchronized (JavaFXManager.class) {
-                if (instance == null) {
+    public static JavaFXManager getInstance()
+    {
+        if (instance == null)
+        {
+            synchronized (JavaFXManager.class)
+            {
+                if (instance == null)
+                {
                     instance = new JavaFXManager();
                 }
             }
@@ -36,22 +40,29 @@ public class JavaFXManager {
      * Helper function that starts the NumberGame on
      * a new thread.
      */
-    public void startNumberGame() {
+    public void startNumberGame()
+    {
         Platform.setImplicitExit(false);
 
-        if (!isJavaFXInitialized) {
-            new Thread(() -> {
-                try {
+        if (!isJavaFXInitialized)
+        {
+            new Thread(() ->{
+                try
+                {
                     Platform.startup(() -> {
                         isJavaFXInitialized = true;
                         startGameInstance();
                     });
-                } catch (IllegalStateException e) {
+                }
+                catch (final IllegalStateException e)
+                {
                     isJavaFXInitialized = true;
                     startGameInstance();
                 }
             }).start();
-        } else {
+        }
+        else
+        {
             Platform.runLater(JavaFXManager.getInstance()::startGameInstance);
         }
     }
@@ -59,11 +70,15 @@ public class JavaFXManager {
     /*
      * Helper function that aids in resetting the game.
      */
-    private void startGameInstance() {
-        if (numberGameInstance == null) {
+    private void startGameInstance()
+    {
+        if (numberGameInstance == null)
+        {
             numberGameInstance = new NumberGame();
             numberGameInstance.start(new Stage());
-        } else {
+        }
+        else
+        {
             numberGameInstance.resetGame();
         }
     }

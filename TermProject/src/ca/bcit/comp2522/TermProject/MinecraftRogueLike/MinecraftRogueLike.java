@@ -52,6 +52,7 @@ public class MinecraftRogueLike
             executorService.shutdown();
         }
 
+        BossFightEventHandler.resetBossEvent();
         play();
     }
 
@@ -120,47 +121,61 @@ public class MinecraftRogueLike
             choice = GameHandler.makeChoice(STARTING_INDEX, MAX_CHOICE_SIZE);
 
             if (choice == CHOOSE_SWAP) {
+                final int secondChoice;
                 System.out.println("You have chosen to swap a card.");
                 System.out.println("Choose an action:");
                 System.out.println(TOKEN_CARD + ". Swap a Token card");
                 System.out.println(WEAPON_CARD + ". Swap a Weapon card");
                 System.out.println(ACTIVATABLE_CARD + ". Swap an Activatable card");
 
-                int secondChoice = GameHandler.makeChoice(STARTING_INDEX, MAX_SWAP_SIZE);
-                switch (secondChoice) {
+                secondChoice = GameHandler.makeChoice(STARTING_INDEX, MAX_SWAP_SIZE);
+                switch (secondChoice)
+                {
                     case TOKEN_CARD -> GameHandler.swapCardOfType(hand, deck, TokenCard.class);
                     case WEAPON_CARD -> GameHandler.swapCardOfType(hand, deck, WeaponCard.class);
                     case ACTIVATABLE_CARD -> GameHandler.swapCardOfType(hand, deck, ActivatableCard.class);
                     default -> System.out.println("Invalid choice");
                 }
-            } else if (choice == CHOOSE_DRAW) {
+            }
+            else if (choice == CHOOSE_DRAW)
+            {
                 System.out.println("You have chosen to draw a card from the deck.");
-                try {
+                try
+                {
                     GameHandler.drawCard(hand, deck);
                     System.out.println("Successfully drew a card!");
-                } catch (DeckEmptyException e) {
+                }
+                catch (final DeckEmptyException e)
+                {
                     System.out.println("The deck is empty. No cards can be drawn.");
                 }
-            } else if (choice == CHOOSE_EVENT) {
-                // Filter for EventCards in hand
-                List<Card> eventCardsInHand = hand.stream()
+            } else if (choice == CHOOSE_EVENT)
+            {
+                final List<Card> eventCardsInHand;
+                eventCardsInHand = hand.stream()
                         .filter(card -> card instanceof EventCard)
                         .toList();
 
-                if (eventCardsInHand.isEmpty()) {
+                if (eventCardsInHand.isEmpty())
+                {
                     System.out.println("No event cards in hand to play.");
-                } else {
-                    System.out.println("Choose an EventCard to play:");
-                    GameHandler.generateOptionsList(eventCardsInHand);
+                }
+                else
+                {
                     final int eventCardChoice;
                     final Card chosenEventCard;
+
+                    System.out.println("Choose an EventCard to play:");
+                    GameHandler.generateOptionsList(eventCardsInHand);
 
                     eventCardChoice = GameHandler.makeChoice(STARTING_INDEX, eventCardsInHand.size());
                     chosenEventCard = eventCardsInHand.get(eventCardChoice - OFFSET);
 
                     GameHandler.playEventCard(chosenEventCard, hand, deck);
                 }
-            } else {
+            }
+            else
+            {
                 System.out.println("Invalid choice, please choose again.");
             }
             round++;
