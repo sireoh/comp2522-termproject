@@ -51,6 +51,60 @@ and only chuck EventCards in the output"
 
 it then spits out something I could work with. I end up typing and fixing it anyways. but it saves me a lot of time having to type it myself.
 
+2) i am very bad at naming variables, so i ask them things like 
+"in order to pull off a combo it requires cards. whats a good variable name for the required cards ?"
+"after a card is obtained after activation whats a good variable name for that ?"
+
+Their response is:
+A good variable name for a card obtained after activation should be descriptive, clear, and concise. Here are a few suggestions based on common programming and card game terminology:
+
+Generic Names:
+
+    obtainedCard - Straightforward and clear.
+    drawnCard - If the card is drawn from the deck.
+    acquiredCard - General-purpose, works for any acquisition method.
+    retrievedCard - If the card is retrieved from another location, like the Graveyard or Banished Zone.
+
+Context-Specific Names:
+
+    effectResultCard - Emphasizes that the card is obtained as the result of an effect.
+    searchResult - If the effect allows searching for a card (e.g., adding it from the Deck to the hand).
+    addedCard - If the card is added to the hand.
+    specialSummonedCard - If the card is directly summoned to the field after activation.
+    activatedCardReward - If the card is seen as a reward or outcome of an effect.
+
+
+3) More sketching out features for NewBoard (i didn't end up using it in the end)
+
+I HAVE ALSO PROVIDED THEM WITH MY CURRENT CODE THAT I MADE MYSELF CALLED
+
+Board.java -> I aked them to sketch out NewBoard.java that i could take features from while maintaining my Board.java.
+
+Since I wrote ALL of Board.java ChatGPT is writing off my own code and logic and fixing and touching up things that needed to be updated.
+
+my prompt: "for this game, it generates a new number every round until
+
+1) there are no valid placements for the next number
+2) the board is filled up
+
+---
+
+the numbers must conform to a strict rule where it goes from smallest to largest
+- say the game starts and the randomly generated number is 33
+- if the board is empty any spot is valid
+- next up, the next number generated is 66 for example
+- the numbers below 33 on the grid should be disabled until the 66 is placed
+- the grid goes from left to right, then starts the next row left to right until it reaches the final box, which is in the bottom right corner
+- so again, top left corner to bottom right corner
+- all the other spots that aren't valid should be disabled until we check what the next number in the queue is
+- so 33 and 66 should be place by now in their respected location
+- next up the number is 74 and the only valid places are any boxes above 66
+
+pls fix my logic to implement these features"
+
+
+
+
 -----------------------------------------------------------
 ---------------------- Debugging --------------------------
 -----------------------------------------------------------
@@ -58,6 +112,44 @@ it then spits out something I could work with. I end up typing and fixing it any
 i literally just dump all my code that im too tired to debug and only say the 2 simple lines below
 
 "pls fix".
+
+"can u fix my logic"
+
+"what should i do to this code so its actually readable ?"
+
+response:
+To improve the readability of your readScoresFromFile method, you can apply several refactoring techniques. These include breaking down complex logic into smaller methods, using meaningful variable names, and ensuring consistent formatting. Here's a more readable version of your code:
+Refactored Code:
+*they just moved things around for me and made it look better. its still all my code*
+
+other thinf i've said
+
+"dont change anything, does it even work ?"
+
+"why is my hashmap called "attempts" not updating
+
+the left side is supposed to be 
+
+0 - correct on first attempt
+1 - correct on second attempt
+2 - incorrect after 2 attempts
+
+and the right side is supposed to update to just 88"
+
+response:
+"he issue with your attempts HashMap not updating is likely due to how you're using the replace method. The replace method in a HashMap only works if the key already exists in the map, otherwise it won't add the new entry.
+
+Here are a few potential reasons why this might be happening:
+
+    Key Initialization: If the attempts HashMap isn't initialized with all possible keys (0, 1, 2, etc.), then the replace method won't work as expected because the keys don’t exist. You may need to ensure that the attempts map is initialized with all the necessary keys before attempting to replace values.
+
+    Adding Missing Keys: If attempts does not already have a key when the replace method is called, you should use the put method instead of replace to add the key-value pair. For example, instead of calling attempts.replace(currentAttempt, 88), try:"
+
+"its literally not updating ..."
+
+response: "Fix the printScore() method:
+
+Make sure that the printScore() method correctly reflects the updated values in the map. You're already doing this by iterating over the map's keys. Ensure that it is called correctly after each question attempt to show the updated scores."
 
 -----------------------------------------------------------
 ---------------------- conclusion -------------------------
