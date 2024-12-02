@@ -42,11 +42,9 @@ public class JavaFXManager {
      */
     public void startNumberGame()
     {
-        Platform.setImplicitExit(false);
-
         if (!isJavaFXInitialized)
         {
-            new Thread(() ->{
+            new Thread(() -> {
                 try
                 {
                     Platform.startup(() -> {

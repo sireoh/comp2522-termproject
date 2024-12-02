@@ -40,6 +40,10 @@ public class WordGame
     private final Random random;
     private int currentQuestionIndex;
 
+    /**
+     * Constructor for WordGame,
+     * sets all variables initialised.
+     */
     public WordGame()
     {
         final World world;
@@ -151,8 +155,6 @@ public class WordGame
             }
         }
     }
-
-
 
     /*
      * Checks if the answer is correct.
@@ -303,7 +305,7 @@ public class WordGame
                 .substring(END_INDEX_RANDOM_FACT_FIRST_LETTER);
     }
 
-    /**
+    /*
      * Generates the ten questions to ask.
      * @return the questions as a List
      */

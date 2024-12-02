@@ -1,7 +1,6 @@
 package ca.bcit.comp2522.TermProject;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;

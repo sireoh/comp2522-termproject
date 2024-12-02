@@ -12,3 +12,10 @@ Correct Second Attempts: 1
 Incorrect Attempts: 8
 Score: 3 points
 
+Date and Time: 2024-12-01 19:47:51
+Games Played: 1
+Correct First Attempts: 0
+Correct Second Attempts: 0
+Incorrect Attempts: 10
+Score: 0 points
+

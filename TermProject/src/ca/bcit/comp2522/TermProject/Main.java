@@ -1,5 +1,6 @@
 package ca.bcit.comp2522.TermProject;
 import ca.bcit.comp2522.TermProject.MinecraftRogueLike.MinecraftRogueLike;
+import javafx.application.Platform;
 
 import java.util.Scanner;
 
@@ -19,6 +20,8 @@ public class Main
 
     public static void main(final String[] args)
     {
+        Platform.setImplicitExit(false);
+
         boolean isStillPlaying;
         String option;
 

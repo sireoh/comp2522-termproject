@@ -1,63 +1,66 @@
-Week 1: Simple Methods
-    Validation - Card class::validateName method, 
-    Method Overloading - GameHandler class::makeChoice method,
-    Constructor Chaining - Not used.
-    Stringbuilder - ActivatableCard or EventCard or TokenCard or WeaponCard class::toString method,
-    Regex - CardFactory class::generateDeck method,
+For my code logic, I mainly used ChatGPT to debug and sketch out features, or debug.
 
-Week 2: Inheritance, Polymorphism and Exception Handling.
-    Inheritance - ActivatableCard or EventCard or TokenCard or WeaponCard class inherits Card class
-    Polymorphism - GameHandler class:::drawCard method, if an instanceof EventCard.
-    Exception Handling - DeckEmptyException exception and InvalidCardTypeException exception.
-    
-Week 3: Final Methods and Abstract Classes
-    Final Method - MinecraftRogueLike class::printDeckDetails method,
-    Abstract Class - abstract Card class is the parent of ActivatableCard, EventCard, TokenCard and WeaponCard class.
-    
-Week 4: Interfaces
-    Interfaces - CardFormatter class::formatCard implemented by Card class
-    
-Week 5: Arrays, Collections, and Iterators
-    Arrays - CardFactory class::generateDeck method, when I call the split method.
-    Collections(List, Map, Set) - MinecraftRogueLike class for List<Card> deck and hand.
-    Enhanced For Loop - ActivatableCard class::getObtainedCards method,
-    Generics Collections - Not used.
-    Iterators - Not used.
+It usually gives me a foundation that I can build up on.
 
-Week 6: Generics and Nested Class.
-    Generics Methods - Not used.
-    Nested Classes - JavaFXManager because it uses the Singleton design pattern.
-    
-Week 7: Functional Interfaces, Lambdas and Method References.
-    Functional Interfaces - Not used.
-    Lambdas - MinecraftRogueLike class::printHandDetails, when it uses card -> card.toString();
-    Method References - GameHandler class, type::isInstance
+I would give it existing code:
 
-Week 8: Files, Paths and Streaming
-    Paths - CardFactory to look for the cardData.txt file
-    Files - CardFactory to look for the cardData.txt file
-    Scanner - Main class for user input.
-    Streaming - GameHandler to stream through the deck list.
-    Random - Not used, as I used Collections.shuffle instead.
+eg. I would dump all my .java files
+Board.java
+Country.java
+JavaFXManager.java
+Main.java
+NumberGame.java
+NumberGameAbstractClass.java
+NumberGameInterface.java
+Score.java
+ScoreHandler.java
+WordGame.java
+World.java
 
-Week 9: GUIs
-    JavaFX - Not used.
-    Threading - In JavaFXManager
-    
-Week 10: Unit Testing
-    Unit Testing - MinecraftRogueLikeTest
+And give them one function that I created eg. the play() function from MinecraftRogueLike.class
 
-Week 11: Design Patterns
-    Singleton - JavaFXManager class.
-    Factory - CardFactory class.
-    Abstract Factory - CardFactory class
-    Command - Plan to use in the future with CardAction class,
-    Decorator - Not used.
-    Observer - Plan to use in the future with CardObserver class,
+-----------------------------------------------------------
+---------------------- Sketching out features -------------
+-----------------------------------------------------------
 
-Week 12: Concurrency
-    Thread - In JavaFXManager
-    Timer/TimerTask - Not used.
-    Executor - MinecraftRogueLike class executorService = Executors.newSingleThreadExecutor();
-    Future Task - futureDeck = executorService.submit(CardFactory::generateDeck);
-    Parallel Task - Not used.
+I would then prompt:
+
+"ok memorize these too.
+
+now start making new functions for me
+
+whenever the game detects there is a card of class "EventCard" you get another option in the menu called "Play event card" but when you play the event card, it looks through its List<String> to see if the required card is also in the users hand. since the other cards are also objects, you might need to use Card.getName()
+
+if the required cards exist in the user's hand, it should say "Successfully played: cardName"
+
+otherwise it would say "Missing requiredcards: " and uses a for loop to show all the required cards that are missing
+
+let me know which files i should update to implement these features"
+
+- most of the time this code doesn't work that well. I just end up referring to it all the time and create my own.
+
+other drafting example:
+
+1) i dump them all the required code
+
+"i have a List<Card> deck
+
+can you stream it in java so that it prints all the Cards that match the EventCard.class() type parameter
+
+and only chuck EventCards in the output"
+
+it then spits out something I could work with. I end up typing and fixing it anyways. but it saves me a lot of time having to type it myself.
+
+-----------------------------------------------------------
+---------------------- Debugging --------------------------
+-----------------------------------------------------------
+
+i literally just dump all my code that im too tired to debug and only say the 2 simple lines below
+
+"pls fix".
+
+-----------------------------------------------------------
+---------------------- conclusion -------------------------
+-----------------------------------------------------------
+
+Again, almost all the code game logic I wrote it myself. ChatGPT is used for drafting and eventually the more I work on the code refining in the most recent good draft I end up overriding everything that ChatGPT has given me.
